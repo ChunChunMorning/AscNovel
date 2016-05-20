@@ -1,5 +1,4 @@
-﻿
-# include <Siv3D.hpp>
+﻿# include <Siv3D.hpp>
 # include "asc\AscNovel.hpp"
 
 void Main()
@@ -11,6 +10,8 @@ void Main()
 	FontAsset::Register(L"test_text", 30, L"メイリオ");
 
 	asc::Novel novel;
+
+	novel.start(0);
 
 	while (System::Update())
 	{
