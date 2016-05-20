@@ -7,11 +7,19 @@ namespace asc
 
 	class MessageManager
 	{
+	private:
+
+		Stopwatch m_stopwatch;
+
+		String m_name;
+
+		String m_text;
+
+		uint32 m_charCount;
+
 	public:
 
 		MessageManager() :
-			m_name(L"名前"),
-			m_text(L"テキスト"),
 			m_charCount(0U) {}
 
 		virtual ~MessageManager() = default;
@@ -26,10 +34,44 @@ namespace asc
 		{
 			// ToDo Configurable
 			const int32 m_textSpeed = 100;
+			const int32 m_textWait = 100;
 
 
+
+			if(m_stopwatch.isPaused())
+				return;
+
+			// This MessageManager is shown all.
+			if (m_stopwatch.ms() >= static_cast<int>(m_text.length) * m_textSpeed + m_textWait)
+			{
+				if (Input::KeyEnter.clicked || Input::KeyQ.pressed)
+				{
+					m_stopwatch.pause();
+				}
+
+				return;
+			}
+
+			// Skip MessageManager.
+			if (Input::KeyEnter.clicked || Input::KeyQ.pressed)
+			{
+				m_charCount = m_text.length;
+				m_stopwatch.pause();
+
+				return;
+			}
 
 			m_charCount = static_cast<int>(m_stopwatch.ms() / m_textSpeed);
+		}
+
+		void setName(const String& name)
+		{
+			m_name = name;
+		}
+
+		void setText(const String& text)
+		{
+			m_text = text;
 		}
 
 		void draw() const
@@ -51,15 +93,10 @@ namespace asc
 			FontAsset(m_textFont).draw(m_text.substr(0U, m_charCount), m_textPosition, m_messageColor);
 		}
 
-	private:
-
-		Stopwatch m_stopwatch;
-
-		String m_name;
-
-		String m_text;
-
-		uint32 m_charCount;
+		bool isUpdating() const
+		{
+			return !m_stopwatch.isPaused();
+		}
 
 	};
 }

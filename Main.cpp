@@ -11,10 +11,17 @@ void Main()
 
 	asc::Novel novel;
 
-	novel.start();
-
 	while (System::Update())
 	{
+		if(Input::Key0.clicked)
+			novel.start(0);
+
+		if(Input::Key1.clicked)
+			novel.start(1);
+
+		if(Input::Key2.clicked)
+			novel.start(2);
+
 		novel.update();
 		novel.draw();
 	}
