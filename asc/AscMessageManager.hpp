@@ -5,14 +5,14 @@ namespace asc
 {
 	using namespace s3d;
 
-	using FontAssetName = String;
-
 	class MessageManager
 	{
 	public:
 
 		MessageManager() :
-			m_charCount(0) {}
+			m_name(L"名前"),
+			m_text(L"テキスト"),
+			m_charCount(0U) {}
 
 		virtual ~MessageManager() = default;
 
