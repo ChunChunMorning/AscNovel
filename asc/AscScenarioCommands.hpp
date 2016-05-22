@@ -1,11 +1,38 @@
 # pragma once
 # include <Siv3D.hpp>
 # include "AscScenarioCommand.hpp"
+# include "AscScenarioController.hpp"
 # include "AscMessageManager.hpp"
 
 namespace asc
 {
 	using namespace s3d;
+
+	//////////////////////////////////////////////////////
+	//
+	//	ScenarioController
+	//
+
+	class SeekPoint : public ScenarioCommand
+	{
+	private:
+
+		ScenarioController* m_scenarioController;
+
+	public:
+
+		SeekPoint(ScenarioController* scenarioController, int32 seekPoint) :
+			ScenarioCommand(seekPoint),
+			m_scenarioController(scenarioController) {}
+
+		void execute() override
+		{
+			m_scenarioController->finish();
+		};
+
+	};
+
+
 
 	//////////////////////////////////////////////////////
 	//
@@ -31,5 +58,6 @@ namespace asc
 			m_messageManager->setText(m_text);
 			m_messageManager->start();
 		};
+
 	};
 }
