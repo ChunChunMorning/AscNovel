@@ -20,7 +20,11 @@ namespace asc
 	public:
 
 		MessageManager() :
-			m_charCount(0U) {}
+			m_charCount(0U)
+		{
+			m_stopwatch.start();
+			m_stopwatch.pause();
+		}
 
 		virtual ~MessageManager() = default;
 

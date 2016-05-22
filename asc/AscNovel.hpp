@@ -3,6 +3,7 @@
 # include "AscMessageManager.hpp"
 # include "AscScenarioCommand.hpp"
 # include "AscScenarioCommands.hpp"
+# include "AscScenarioController.hpp"
 
 namespace asc
 {
@@ -12,6 +13,8 @@ namespace asc
 	{
 	private:
 
+		std::unique_ptr<ScenarioController> m_scenarioController;
+
 		std::unique_ptr<MessageManager> m_messageManager;
 
 		Array<std::unique_ptr<ScenarioCommand>> m_scenarioCommands;
@@ -19,23 +22,44 @@ namespace asc
 	public:
 
 		Novel() :
+			m_scenarioController(std::make_unique<ScenarioController>()),
 			m_messageManager(std::make_unique<MessageManager>())
 		{
+			m_scenarioCommands.push_back(std::make_unique<SeekPoint>(m_scenarioController.get(), 0));
+			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"0: Write Text"));
+			m_scenarioCommands.push_back(std::make_unique<SeekPoint>(m_scenarioController.get(), 1));
+			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"0: Write Text"));
+			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"1: Write Text"));
+			m_scenarioCommands.push_back(std::make_unique<SeekPoint>(m_scenarioController.get(), 2));
 			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"0: Write Text"));
 			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"1: Write Text"));
 			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"2: Write Text"));
+			m_scenarioCommands.push_back(std::make_unique<SeekPoint>(m_scenarioController.get(), 3));
 		}
 
 		virtual ~Novel() = default;
 
-		void start(int32 seekPoint)
+		bool start(int32 seekPoint)
 		{
-			m_scenarioCommands[seekPoint]->execute();
+			return m_scenarioController->start(seekPoint, m_scenarioCommands);
 		}
 
 		void update()
 		{
+			while (
+				m_scenarioController->isUpdating() &&
+				!m_messageManager->isUpdating()
+			)
+			{
+				m_scenarioCommands[m_scenarioController->currentLine++]->execute();
+			}
+
 			m_messageManager->update();
+		}
+
+		bool isUpdating()
+		{
+			return m_scenarioController->isUpdating();
 		}
 
 		void draw() const

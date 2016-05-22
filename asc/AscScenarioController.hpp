@@ -12,24 +12,25 @@ namespace asc
 
 		bool m_isUpdating;
 
-		int32 m_currentLine;
-
 	public:
 
+		int32 currentLine;
+
 		ScenarioController() :
-			m_isUpdating(false) {}
+			m_isUpdating(false),
+			currentLine(0) {}
 
 		bool start(int32 seekPoint, const Array<std::unique_ptr<ScenarioCommand>>& scenarioCommands)
 		{
 			for (auto i = 0u; i < scenarioCommands.size() - 1; i++)
 			{
-				auto index = (m_currentLine + i) % scenarioCommands.size();
-				auto point = scenarioCommands[index]->getSeekPoint();
+				const auto index = (currentLine + i) % scenarioCommands.size();
+				const auto point = scenarioCommands[index]->getSeekPoint();
 
 				if (point && point.value() == seekPoint)
 				{
 					m_isUpdating = true;
-					m_currentLine = index + 1;
+					currentLine = index + 1;
 
 					return true;
 				}
@@ -46,11 +47,6 @@ namespace asc
 		bool isUpdating() const
 		{
 			return m_isUpdating;
-		}
-
-		int32 getCurrentLine() const
-		{
-			return m_currentLine;
 		}
 
 	};

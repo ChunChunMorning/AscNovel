@@ -27,6 +27,7 @@ namespace asc
 
 		void execute() override
 		{
+			m_scenarioController->currentLine--;
 			m_scenarioController->finish();
 		};
 

@@ -23,6 +23,8 @@ void Main()
 			novel.start(2);
 
 		novel.update();
-		novel.draw();
+
+		if(novel.isUpdating())
+			novel.draw();
 	}
 }
