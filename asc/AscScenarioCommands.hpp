@@ -29,6 +29,7 @@ namespace asc
 		void execute() override
 		{
 			m_messageManager->setText(m_text);
+			m_messageManager->start();
 		};
 	};
 }
