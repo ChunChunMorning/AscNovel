@@ -1,6 +1,8 @@
 # pragma once
 # include <Siv3D.hpp>
 # include "AscMessageManager.hpp"
+# include "AscScenarioCommand.hpp"
+# include "AscScenarioCommands.hpp"
 
 namespace asc
 {
@@ -12,32 +14,23 @@ namespace asc
 
 		std::unique_ptr<MessageManager> m_messageManager;
 
+		Array<std::unique_ptr<ScenarioCommand>> m_scenarioCommands;
+
 	public:
 
 		Novel() :
-			m_messageManager(std::make_unique<MessageManager>()) {}
+			m_messageManager(std::make_unique<MessageManager>())
+		{
+			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"0: Write Text"));
+			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"1: Write Text"));
+			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"2: Write Text"));
+		}
 
 		virtual ~Novel() = default;
 
 		void start(int32 seekPoint)
 		{
-			switch (seekPoint)
-			{
-			case 0:
-				m_messageManager->setName(L"0: 名前");
-				m_messageManager->setText(L"文章一行目。\n文章二行目");
-				break;
-
-			case 1:
-				m_messageManager->setName(L"1: 名前");
-				m_messageManager->setText(L"単一行テキスト");
-				break;
-
-			default:
-				m_messageManager->setText(L"テキストのみ更新");
-				break;
-			}
-			m_messageManager->start();
+			m_scenarioCommands[seekPoint]->execute();
 		}
 
 		void update()
