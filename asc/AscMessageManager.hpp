@@ -45,24 +45,19 @@ namespace asc
 			if(m_stopwatch.isPaused())
 				return;
 
-			// This MessageManager is shown all.
-			if (m_stopwatch.ms() >= static_cast<int>(m_text.length) * m_textSpeed + m_textWait)
+			const auto typingTime = static_cast<int32>(m_text.length) * m_textSpeed;
+
+			if (m_stopwatch.ms() >= typingTime)
 			{
-				if (Input::KeyEnter.clicked || Input::KeyQ.pressed)
+				if (m_stopwatch.ms() >= typingTime + m_textWait && (Input::KeyEnter.clicked || Input::KeyQ.pressed))
 				{
 					m_stopwatch.pause();
+					return;
 				}
-
-				return;
 			}
-
-			// Skip MessageManager.
-			if (Input::KeyEnter.clicked || Input::KeyQ.pressed)
+			else if(Input::KeyEnter.clicked || Input::KeyQ.pressed)
 			{
-				m_charCount = m_text.length;
-				m_stopwatch.pause();
-
-				return;
+				m_stopwatch.set(static_cast<Milliseconds>(m_text.length * m_textSpeed));
 			}
 
 			m_charCount = static_cast<int>(m_stopwatch.ms() / m_textSpeed);
