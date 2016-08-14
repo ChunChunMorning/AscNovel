@@ -38,7 +38,7 @@ namespace asc
 			m_scenarioCommands.push_back(std::make_unique<SeekPoint>(m_scenarioController.get(), 2));
 			m_scenarioCommands.push_back(std::make_unique<AddSprite>(m_spriteManager.get(), 1, L"character1", RectF(0, 0, 640, 720)));
 			m_scenarioCommands.push_back(std::make_unique<AddSprite>(m_spriteManager.get(), 2, L"character2", RectF(640, 0, 640, 720)));
-			m_scenarioCommands.push_back(std::make_unique<AddSprite>(m_spriteManager.get(), 3, L"character3", RectF(480, 180, 320, 360)));
+			m_scenarioCommands.push_back(std::make_unique<AddFixedSprite>(m_spriteManager.get(), 3, L"character3", RectF(480, 180, 320, 360)));
 			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"0: Write Text"));
 			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"1: Write Text"));
 			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"2: Write Text"));

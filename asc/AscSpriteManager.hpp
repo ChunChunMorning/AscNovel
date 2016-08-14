@@ -18,14 +18,10 @@ namespace asc
 
 		virtual ~SpriteManager() = default;
 
-		void addSprite(int id, const String& texture, const RectF& region)
+		template <class Type>
+		void addSprite(const Type& sprite)
 		{
-			m_sprites.push_back(std::make_unique<Sprite>(id, texture, region));
-		}
-
-		void addFixedSprite(int id, const String& texture, const RectF& region)
-		{
-			m_sprites.push_back(std::make_unique<FixedSprite>(id, texture, region));
+			m_sprites.push_back(std::make_unique<Type>(sprite));
 		}
 
 		void deleteSprite(int id)
