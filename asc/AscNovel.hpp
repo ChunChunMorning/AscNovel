@@ -4,6 +4,7 @@
 # include "AscScenarioCommand.hpp"
 # include "AscScenarioCommands.hpp"
 # include "AscScenarioController.hpp"
+# include "AscSpriteManager.hpp"
 
 namespace asc
 {
@@ -17,13 +18,16 @@ namespace asc
 
 		std::unique_ptr<MessageManager> m_messageManager;
 
+		std::unique_ptr<SpriteManager> m_spriteManager;
+
 		Array<std::unique_ptr<ScenarioCommand>> m_scenarioCommands;
 
 	public:
 
 		Novel() :
 			m_scenarioController(std::make_unique<ScenarioController>()),
-			m_messageManager(std::make_unique<MessageManager>())
+			m_messageManager(std::make_unique<MessageManager>()),
+			m_spriteManager(std::make_unique<SpriteManager>())
 		{
 			m_scenarioCommands.push_back(std::make_unique<SeekPoint>(m_scenarioController.get(), 0));
 			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"0: Write Text"));
@@ -64,6 +68,7 @@ namespace asc
 
 		void draw() const
 		{
+			m_spriteManager->draw();
 			m_messageManager->draw();
 		}
 	};
