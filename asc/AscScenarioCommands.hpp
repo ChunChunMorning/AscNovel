@@ -1,8 +1,9 @@
 # pragma once
 # include <Siv3D.hpp>
+# include "AscMessageManager.hpp"
 # include "AscScenarioCommand.hpp"
 # include "AscScenarioController.hpp"
-# include "AscMessageManager.hpp"
+# include "AscSpriteManager.hpp"
 
 namespace asc
 {
@@ -58,6 +59,38 @@ namespace asc
 		{
 			m_messageManager->setText(m_text);
 			m_messageManager->start();
+		};
+
+	};
+
+	//////////////////////////////////////////////////////
+	//
+	//	SpriteManager
+	//
+
+	class AddSprite : public ScenarioCommand
+	{
+	private:
+
+		SpriteManager* m_spriteManager;
+
+		int m_id;
+
+		String m_texture;
+
+		RectF m_region;
+
+	public:
+
+		AddSprite(SpriteManager* spriteManager, int id, const String& texture, const RectF& region) :
+			m_spriteManager(spriteManager),
+			m_id(id),
+			m_texture(texture),
+			m_region(region) {}
+
+		void execute() override
+		{
+			m_spriteManager->addSprite(m_id, m_texture, m_region);
 		};
 
 	};
