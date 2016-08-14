@@ -7,7 +7,7 @@ namespace asc
 {
 	using namespace s3d;
 
-	using Commnad = std::pair<int, String>;
+	using Commnad = std::pair<int32, String>;
 
 	class Novel
 	{
