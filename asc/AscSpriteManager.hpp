@@ -52,5 +52,6 @@ namespace asc
 				sprite->draw();
 			}
 		}
+
 	};
 }

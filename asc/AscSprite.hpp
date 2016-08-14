@@ -56,6 +56,7 @@ namespace asc
 		{
 			m_region(TextureAsset(m_texture)).draw(m_isHighlight ? light[0] : light[1]);
 		}
+
 	};
 
 	class FixedSprite : public Sprite
@@ -80,5 +81,6 @@ namespace asc
 		{
 			m_region(TextureAsset(m_texture)).draw();
 		}
+
 	};
 }
