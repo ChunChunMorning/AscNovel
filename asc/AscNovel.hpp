@@ -19,9 +19,9 @@ namespace asc
 
 		Array<Commnad> m_commands;
 
-		std::unique_ptr<MessageManager> m_messageManager;
+		MessageManager m_messageManager;
 
-		std::unique_ptr<SpriteManager> m_spriteManager;
+		SpriteManager m_spriteManager;
 
 		void execute()
 		{
@@ -30,28 +30,28 @@ namespace asc
 			// Point
 			case 0:
 				m_isUpdating = false;
+				m_spriteManager.clearSprite();
 				return;
 
 			// Text
 			case 1:
-				m_messageManager->setText(m_commands[m_currentLine].second);
-				m_messageManager->start();
+				m_messageManager.setText(m_commands[m_currentLine].second);
+				m_messageManager.start();
 				break;
 
 			// Name
 			case 2:
-				m_messageManager->setName(m_commands[m_currentLine].second);
-				m_messageManager->start();
+				m_messageManager.setName(m_commands[m_currentLine].second);
 				break;
 
 			// AddSprite
 			case 3:
-				m_spriteManager->addSprite(Sprite(m_commands[m_currentLine].second));
+				m_spriteManager.addSprite(Sprite(m_commands[m_currentLine].second));
 				break;
 
 			// AddFixedSprite
 			case 4:
-				m_spriteManager->addSprite(FixedSprite(m_commands[m_currentLine].second));
+				m_spriteManager.addSprite(FixedSprite(m_commands[m_currentLine].second));
 				break;
 
 			default:
@@ -65,8 +65,7 @@ namespace asc
 
 		Novel() :
 			m_isUpdating(false),
-			m_messageManager(std::make_unique<MessageManager>()),
-			m_spriteManager(std::make_unique<SpriteManager>())
+			m_currentLine(0)
 		{
 			m_commands.push_back({ 0, L"0"});
 			m_commands.push_back({ 1, L"0: Write Text"});
@@ -95,7 +94,6 @@ namespace asc
 				{
 					m_isUpdating = true;
 					m_currentLine = index + 1;
-					m_spriteManager->clearSprite();
 
 					return true;
 				}
@@ -108,13 +106,13 @@ namespace asc
 		{
 			while (
 				m_isUpdating &&
-				!m_messageManager->isUpdating()
+				!m_messageManager.isUpdating()
 			)
 			{
 				execute();
 			}
 
-			m_messageManager->update();
+			m_messageManager.update();
 		}
 
 		bool isUpdating()
@@ -124,8 +122,8 @@ namespace asc
 
 		void draw() const
 		{
-			m_spriteManager->draw();
-			m_messageManager->draw();
+			m_spriteManager.draw();
+			m_messageManager.draw();
 		}
 	};
 }
