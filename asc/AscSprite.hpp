@@ -17,6 +17,8 @@ namespace asc
 
 		int m_id;
 
+	protected:
+
 		TextureAssetName m_texture;
 
 		RectF m_region;
@@ -35,19 +37,48 @@ namespace asc
 
 		virtual ~Sprite() = default;
 
+		virtual void turnOn()
+		{
+			m_isHighlight = true;
+		}
+
 		virtual void turnOff()
 		{
 			m_isHighlight = false;
 		}
 
-		void turnOn()
+		int getID() const
 		{
-			m_isHighlight = true;
+			return m_id;
 		}
 
-		void draw() const
+		virtual void draw() const
 		{
 			m_region(TextureAsset(m_texture)).draw(m_isHighlight ? light[0] : light[1]);
+		}
+	};
+
+	class FixedSprite : public Sprite
+	{
+	public:
+
+		FixedSprite() = default;
+
+		FixedSprite(int id, TextureAssetName texture, RectF region) :
+			Sprite(id, texture, region)
+		{
+			turnOn();
+		}
+
+		virtual ~FixedSprite() = default;
+
+		virtual void turnOn() override {}
+
+		virtual void turnOff() override {}
+
+		virtual void draw() const override
+		{
+			m_region(TextureAsset(m_texture)).draw();
 		}
 	};
 }
