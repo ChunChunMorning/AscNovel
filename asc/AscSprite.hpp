@@ -5,11 +5,7 @@ namespace asc
 {
 	using TextureAssetName = String;
 
-	const std::array<Color, 2> light =
-	{
-		Color(255, 255, 255),
-		Color(120, 120, 120)
-	};
+	const Color ShadeColor = Color(120);
 
 	class Sprite
 	{
@@ -23,7 +19,7 @@ namespace asc
 
 		RectF m_region;
 
-		bool m_isHighlight;
+		bool m_light;
 
 	public:
 
@@ -39,19 +35,14 @@ namespace asc
 			m_region.y = Parse<double>(args[3]);
 			m_region.w = Parse<double>(args[4]);
 			m_region.h = Parse<double>(args[5]);
-			m_isHighlight = false;
+			m_light = false;
 		}
 
 		virtual ~Sprite() = default;
 
-		virtual void turnOn()
+		virtual bool lightUp(bool light)
 		{
-			m_isHighlight = true;
-		}
-
-		virtual void turnOff()
-		{
-			m_isHighlight = false;
+			return m_light = light;
 		}
 
 		int getID() const
@@ -61,7 +52,7 @@ namespace asc
 
 		virtual void draw() const
 		{
-			m_region(TextureAsset(m_texture)).draw(m_isHighlight ? light[0] : light[1]);
+			m_region(TextureAsset(m_texture)).draw(m_light ? Palette::White : ShadeColor);
 		}
 
 	};
@@ -75,14 +66,15 @@ namespace asc
 		FixedSprite(const String& string) :
 			Sprite(string)
 		{
-			turnOn();
+			m_light = true;
 		}
 
 		virtual ~FixedSprite() = default;
 
-		virtual void turnOn() override {}
-
-		virtual void turnOff() override {}
+		virtual bool lightUp(bool light) override
+		{
+			return m_light;
+		}
 
 		virtual void draw() const override
 		{
