@@ -1,9 +1,6 @@
 # pragma once
 # include <Siv3D.hpp>
 # include "AscMessageManager.hpp"
-# include "AscScenarioCommand.hpp"
-# include "AscScenarioCommands.hpp"
-# include "AscScenarioController.hpp"
 # include "AscSpriteManager.hpp"
 
 namespace asc
@@ -14,35 +11,31 @@ namespace asc
 	{
 	private:
 
-		std::unique_ptr<ScenarioController> m_scenarioController;
+		bool m_isUpdating;
+
+		int32 m_currentLine;
+
+		Array<Array<String>> m_scenario;
 
 		std::unique_ptr<MessageManager> m_messageManager;
 
 		std::unique_ptr<SpriteManager> m_spriteManager;
 
-		Array<std::unique_ptr<ScenarioCommand>> m_scenarioCommands;
-
 	public:
 
 		Novel() :
-			m_scenarioController(std::make_unique<ScenarioController>()),
+			m_isUpdating(false),
 			m_messageManager(std::make_unique<MessageManager>()),
 			m_spriteManager(std::make_unique<SpriteManager>())
 		{
-			m_scenarioCommands.push_back(std::make_unique<SeekPoint>(m_scenarioController.get(), 0));
-			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"0: Write Text"));
-			m_scenarioCommands.push_back(std::make_unique<SeekPoint>(m_scenarioController.get(), 1));
-			m_scenarioCommands.push_back(std::make_unique<AddSprite>(m_spriteManager.get(), 1, L"character1", RectF(0, 0, 640, 720)));
-			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"0: Write Text"));
-			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"1: Write Text"));
-			m_scenarioCommands.push_back(std::make_unique<SeekPoint>(m_scenarioController.get(), 2));
-			m_scenarioCommands.push_back(std::make_unique<AddSprite>(m_spriteManager.get(), 1, L"character1", RectF(0, 0, 640, 720)));
-			m_scenarioCommands.push_back(std::make_unique<AddSprite>(m_spriteManager.get(), 2, L"character2", RectF(640, 0, 640, 720)));
-			m_scenarioCommands.push_back(std::make_unique<AddFixedSprite>(m_spriteManager.get(), 3, L"character3", RectF(480, 180, 320, 360)));
-			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"0: Write Text"));
-			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"1: Write Text"));
-			m_scenarioCommands.push_back(std::make_unique<WriteText>(m_messageManager.get(), L"2: Write Text"));
-			m_scenarioCommands.push_back(std::make_unique<SeekPoint>(m_scenarioController.get(), 3));
+			m_scenario.push_back({ L"Point", L"0"});
+			m_scenario.push_back({ L"Text", L"0: Write Text"});
+			m_scenario.push_back({ L"Point", L"1"});
+			m_scenario.push_back({ L"Sprite", L"1", L"character1", L"0", L"0", L"640", L"720" });
+			m_scenario.push_back({ L"Sprite", L"3", L"character3", L"480", L"180", L"320", L"360" });
+			m_scenario.push_back({ L"Text", L"1: Write Text" });
+			m_scenario.push_back({ L"Text", L"1: Write Text2" });
+			m_scenario.push_back({ L"Point", L"2" });
 		}
 
 		virtual ~Novel() = default;
@@ -50,17 +43,56 @@ namespace asc
 		bool start(int32 seekPoint)
 		{
 			m_spriteManager->clearSprite();
-			return m_scenarioController->start(seekPoint, m_scenarioCommands);
+			
+			const auto size = m_scenario.size() - 1;
+			for (auto i = 0u; i < size; i++)
+			{
+				const auto index = (m_currentLine + i) % m_scenario.size();
+
+				const auto command = m_scenario[index][0];
+				if (command == L"Point" && Parse<int32>(m_scenario[index][1]) == seekPoint)
+				{
+					m_isUpdating = true;
+					m_currentLine = index + 1;
+
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		void update()
 		{
 			while (
-				m_scenarioController->isUpdating() &&
+				m_isUpdating &&
 				!m_messageManager->isUpdating()
 			)
 			{
-				m_scenarioCommands[m_scenarioController->currentLine++]->execute();
+				const auto command = m_scenario[m_currentLine][0];
+
+				if (command == L"Point")
+				{
+					m_isUpdating = false;
+				}
+				else
+				{
+					if (command == L"Text")
+					{
+						m_messageManager->setText(m_scenario[m_currentLine][1]);
+						m_messageManager->start();
+					}
+					else if (command == L"Sprite")
+					{
+						m_spriteManager->addSprite(Sprite(
+							Parse<int>(m_scenario[m_currentLine][1]),
+							m_scenario[m_currentLine][2],
+							RectF(0, 0, 640, 720)
+							));
+					}
+
+					m_currentLine++;
+				}
 			}
 
 			m_messageManager->update();
@@ -68,7 +100,7 @@ namespace asc
 
 		bool isUpdating()
 		{
-			return m_scenarioController->isUpdating();
+			return m_isUpdating;
 		}
 
 		void draw() const
