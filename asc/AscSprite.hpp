@@ -29,11 +29,18 @@ namespace asc
 
 		Sprite() = default;
 
-		Sprite(int id, TextureAssetName texture, RectF region) :
-			m_id(id),
-			m_texture(texture),
-			m_region(region),
-			m_isHighlight(false) {}
+		Sprite(const String& string)
+		{
+			const auto args = string.split(L',');
+
+			m_id = Parse<int>(args[0]);
+			m_texture = args[1];
+			m_region.x = Parse<double>(args[2]);
+			m_region.y = Parse<double>(args[3]);
+			m_region.w = Parse<double>(args[4]);
+			m_region.h = Parse<double>(args[5]);
+			m_isHighlight = false;
+		}
 
 		virtual ~Sprite() = default;
 
@@ -65,8 +72,8 @@ namespace asc
 
 		FixedSprite() = default;
 
-		FixedSprite(int id, TextureAssetName texture, RectF region) :
-			Sprite(id, texture, region)
+		FixedSprite(const String& string) :
+			Sprite(string)
 		{
 			turnOn();
 		}

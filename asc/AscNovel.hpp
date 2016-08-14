@@ -7,6 +7,8 @@ namespace asc
 {
 	using namespace s3d;
 
+	using Commnad = std::pair<int, String>;
+
 	class Novel
 	{
 	private:
@@ -15,11 +17,49 @@ namespace asc
 
 		int32 m_currentLine;
 
-		Array<Array<String>> m_scenario;
+		Array<Commnad> m_commands;
 
 		std::unique_ptr<MessageManager> m_messageManager;
 
 		std::unique_ptr<SpriteManager> m_spriteManager;
+
+		void execute()
+		{
+			switch (m_commands[m_currentLine].first)
+			{
+			// Point
+			case 0:
+				m_isUpdating = false;
+				return;
+
+			// Text
+			case 1:
+				m_messageManager->setText(m_commands[m_currentLine].second);
+				m_messageManager->start();
+				break;
+
+			// Name
+			case 2:
+				m_messageManager->setName(m_commands[m_currentLine].second);
+				m_messageManager->start();
+				break;
+
+			// AddSprite
+			case 3:
+				m_spriteManager->addSprite(Sprite(m_commands[m_currentLine].second));
+				break;
+
+			// AddFixedSprite
+			case 4:
+				m_spriteManager->addSprite(FixedSprite(m_commands[m_currentLine].second));
+				break;
+
+			default:
+				break;
+			}
+
+			m_currentLine++;
+		}
 
 	public:
 
@@ -28,32 +68,34 @@ namespace asc
 			m_messageManager(std::make_unique<MessageManager>()),
 			m_spriteManager(std::make_unique<SpriteManager>())
 		{
-			m_scenario.push_back({ L"Point", L"0"});
-			m_scenario.push_back({ L"Text", L"0: Write Text"});
-			m_scenario.push_back({ L"Point", L"1"});
-			m_scenario.push_back({ L"Sprite", L"1", L"character1", L"0", L"0", L"640", L"720" });
-			m_scenario.push_back({ L"Sprite", L"3", L"character3", L"480", L"180", L"320", L"360" });
-			m_scenario.push_back({ L"Text", L"1: Write Text" });
-			m_scenario.push_back({ L"Text", L"1: Write Text2" });
-			m_scenario.push_back({ L"Point", L"2" });
+			m_commands.push_back({ 0, L"0"});
+			m_commands.push_back({ 1, L"0: Write Text"});
+			m_commands.push_back({ 0, L"1"});
+			m_commands.push_back({ 3, L"1,character1,0,0,640,720" });
+			m_commands.push_back({ 3, L"3,character3,480,180,320,360" });
+			m_commands.push_back({ 1, L"1: Write Text" });
+			m_commands.push_back({ 1, L"1: Write Text2" });
+			m_commands.push_back({ 0, L"-1" });
 		}
 
 		virtual ~Novel() = default;
 
 		bool start(int32 seekPoint)
 		{
-			m_spriteManager->clearSprite();
-			
-			const auto size = m_scenario.size() - 1;
+			const auto size = m_commands.size() - 1;
 			for (auto i = 0u; i < size; i++)
 			{
-				const auto index = (m_currentLine + i) % m_scenario.size();
+				const auto index = (m_currentLine + i) % m_commands.size();
 
-				const auto command = m_scenario[index][0];
-				if (command == L"Point" && Parse<int32>(m_scenario[index][1]) == seekPoint)
+				const auto command = m_commands[index];
+				if (
+					command.first == 0 &&
+					Parse<int32>(command.second) == seekPoint
+				)
 				{
 					m_isUpdating = true;
 					m_currentLine = index + 1;
+					m_spriteManager->clearSprite();
 
 					return true;
 				}
@@ -69,30 +111,7 @@ namespace asc
 				!m_messageManager->isUpdating()
 			)
 			{
-				const auto command = m_scenario[m_currentLine][0];
-
-				if (command == L"Point")
-				{
-					m_isUpdating = false;
-				}
-				else
-				{
-					if (command == L"Text")
-					{
-						m_messageManager->setText(m_scenario[m_currentLine][1]);
-						m_messageManager->start();
-					}
-					else if (command == L"Sprite")
-					{
-						m_spriteManager->addSprite(Sprite(
-							Parse<int>(m_scenario[m_currentLine][1]),
-							m_scenario[m_currentLine][2],
-							RectF(0, 0, 640, 720)
-							));
-					}
-
-					m_currentLine++;
-				}
+				execute();
 			}
 
 			m_messageManager->update();
