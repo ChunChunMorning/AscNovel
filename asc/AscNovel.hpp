@@ -23,14 +23,20 @@ namespace asc
 
 		SpriteManager m_spriteManager;
 
+		void finish()
+		{
+			m_isUpdating = false;
+			m_messageManager.clear();
+			m_spriteManager.clearSprite();
+		}
+
 		void execute()
 		{
 			switch (m_commands[m_currentLine].first)
 			{
 			// Point
 			case 0:
-				m_isUpdating = false;
-				m_spriteManager.clearSprite();
+				finish();
 				return;
 
 			// Text

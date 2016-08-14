@@ -73,6 +73,12 @@ namespace asc
 			m_text = text;
 		}
 
+		void clear()
+		{
+			m_name.clear();
+			m_text.clear();
+		}
+
 		void draw() const
 		{
 			// ToDo Configurable
