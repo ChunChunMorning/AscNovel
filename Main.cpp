@@ -4,7 +4,9 @@
 void Main()
 {
 	Window::Resize(1280, 720);
-
+	TextureAsset::Register(L"character1", L"character1.png");
+	TextureAsset::Register(L"character2", L"character2.png");
+	TextureAsset::Register(L"character3", L"character3.png");
 	TextureAsset::Register(L"test_message_box", L"test_message_box.png");
 	FontAsset::Register(L"test_name", 30, L"メイリオ");
 	FontAsset::Register(L"test_text", 30, L"メイリオ");
