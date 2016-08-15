@@ -1,5 +1,6 @@
 # pragma once
 # include <Siv3D.hpp>
+# include "AscChoiceManager.hpp"
 # include "AscMessageManager.hpp"
 # include "AscSpriteManager.hpp"
 
@@ -18,6 +19,8 @@ namespace asc
 		int32 m_currentLine;
 
 		Array<Commnad> m_commands;
+
+		ChoiceManager m_choiceManager;
 
 		MessageManager m_messageManager;
 
@@ -45,12 +48,12 @@ namespace asc
 
 			// AddSprite
 			case 3:
-				m_spriteManager.addSprite(Sprite(m_commands[m_currentLine].second));
+				m_spriteManager.add(Sprite(m_commands[m_currentLine].second));
 				break;
 
 			// AddFixedSprite
 			case 4:
-				m_spriteManager.addSprite(FixedSprite(m_commands[m_currentLine].second));
+				m_spriteManager.add(FixedSprite(m_commands[m_currentLine].second));
 				break;
 
 			default:
@@ -93,7 +96,7 @@ namespace asc
 				{
 					m_isUpdating = true;
 					m_messageManager.clear();
-					m_spriteManager.clearSprite();
+					m_spriteManager.clear();
 					m_currentLine = index + 1;
 
 					return true;
@@ -125,6 +128,7 @@ namespace asc
 		{
 			m_spriteManager.draw();
 			m_messageManager.draw();
+			m_choiceManager.draw();
 		}
 	};
 }
