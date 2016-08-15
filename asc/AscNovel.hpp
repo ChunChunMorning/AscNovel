@@ -56,6 +56,10 @@ namespace asc
 				m_spriteManager.add(FixedSprite(m_commands[m_currentLine].second));
 				break;
 
+			// Choice
+			case 5:
+				m_choiceManager.start(m_commands[m_currentLine].second);
+
 			default:
 				break;
 			}
@@ -76,6 +80,7 @@ namespace asc
 			m_commands.push_back({ 3, L"3,character3,480,180,320,360" });
 			m_commands.push_back({ 1, L"1: Write Text" });
 			m_commands.push_back({ 1, L"1: Write Text2" });
+			m_commands.push_back({ 5, L"0,Yes,1,No" });
 			m_commands.push_back({ 0, L"-1" });
 		}
 

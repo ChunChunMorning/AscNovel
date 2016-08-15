@@ -5,6 +5,13 @@ namespace asc
 {
 	using namespace s3d;
 
+	struct Choice
+	{
+		int32 seekPoint;
+		String text;
+		Point position;
+	};
+
 	class ChoiceManager
 	{
 	private:
@@ -18,9 +25,25 @@ namespace asc
 
 		virtual ~ChoiceManager() = default;
 
-		void start()
+		void start(String text)
 		{
-			
+			const auto args = text.split(L',');
+			Array<std::pair<int32, String>> choices;
+
+			for (auto i = 0u; i < args.size(); i += 2)
+			{
+				choices.push_back(std::make_pair(Parse<int32>(args[i]), args[i + 1]));
+			}
+
+			start(choices);
+		}
+
+		void start(const Array<std::pair<int32, String>>& choices)
+		{
+			for (const auto& c : choices)
+			{
+				Println(c.first, c.second);
+			}
 		}
 
 		void update()
@@ -35,6 +58,9 @@ namespace asc
 
 		void draw() const
 		{
+			if(!m_isUpdating)
+				return;
+
 			// ToDo Configurable
 			const Rect m_choiceBox(850, 330, 400, 160);
 			const Point m_textPosition(870, 340);
