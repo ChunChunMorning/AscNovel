@@ -77,6 +77,7 @@ namespace asc
 		{
 			m_name.clear();
 			m_text.clear();
+			m_stopwatch.pause();
 		}
 
 		void draw() const

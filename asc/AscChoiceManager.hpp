@@ -91,6 +91,7 @@ namespace asc
 		{
 			m_selected = 0;
 			m_choices.clear();
+			m_isUpdating = false;
 		}
 
 		int32 lastSelectedSeekPoint() const
