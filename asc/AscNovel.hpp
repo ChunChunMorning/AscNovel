@@ -115,7 +115,8 @@ namespace asc
 		{
 			while (
 				m_isUpdating &&
-				!m_messageManager.isUpdating()
+				!m_messageManager.isUpdating() &&
+				!m_choiceManager.isUpdating()
 			)
 			{
 				execute();

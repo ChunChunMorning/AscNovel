@@ -18,6 +18,8 @@ namespace asc
 
 		bool m_isUpdating;
 
+		Array<Choice> m_choices;
+
 	public:
 
 		ChoiceManager() :
@@ -40,10 +42,19 @@ namespace asc
 
 		void start(const Array<std::pair<int32, String>>& choices)
 		{
+			// ToDo Configurable
+			const Point m_textPosition(870, 340);
+			const String m_textFont = L"test_text";
+
+			Point position = m_textPosition;
+
 			for (const auto& c : choices)
 			{
-				Println(c.first, c.second);
+				m_choices.push_back({c.first, c.second, position});
+				position.y += FontAsset(m_textFont)(c.second).region().h;
 			}
+
+			m_isUpdating = true;
 		}
 
 		void update()
@@ -63,17 +74,12 @@ namespace asc
 
 			// ToDo Configurable
 			const Rect m_choiceBox(850, 330, 400, 160);
-			const Point m_textPosition(870, 340);
 			const String m_choiceBoxTexture = L"test_choice_box";
 			const String m_textFont = L"test_text";
 			const Color m_textColor = Palette::Black;
-			const String m_text = L"Yes\nNo";
-
 
 
 			m_choiceBox(TextureAsset(m_choiceBoxTexture)).draw();
-
-			FontAsset(m_textFont).draw(m_text, m_textPosition, m_textColor);
 		}
 
 		bool isUpdating() const
