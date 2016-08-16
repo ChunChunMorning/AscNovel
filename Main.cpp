@@ -25,6 +25,27 @@ void Main()
 		if(Input::Key2.clicked)
 			novel.start(2);
 
+		if (Input::Key3.clicked)
+			novel.start(3);
+
+		if (Input::Key4.clicked)
+			novel.start(4);
+
+		if (Input::Key5.clicked)
+			novel.start(5);
+
+		if (Input::Key6.clicked)
+			novel.start(6);
+
+		if (Input::Key7.clicked)
+			novel.start(7);
+
+		if (Input::Key8.clicked)
+			novel.start(8);
+
+		if (Input::Key9.clicked)
+			novel.start(9);
+
 		novel.update();
 
 		if(novel.isUpdating())

@@ -81,14 +81,18 @@ namespace asc
 			m_isUpdating(false),
 			m_currentLine(0)
 		{
-			m_commands.push_back({ 0, L"0"});
-			m_commands.push_back({ 1, L"0: Write Text"});
 			m_commands.push_back({ 0, L"1"});
 			m_commands.push_back({ 3, L"1,character1,0,0,640,720" });
 			m_commands.push_back({ 3, L"3,character3,480,180,320,360" });
-			m_commands.push_back({ 1, L"1: Write Text" });
-			m_commands.push_back({ 1, L"1: Write Text2" });
-			m_commands.push_back({ 5, L"0,Yes,1,No" });
+			m_commands.push_back({ 1, L"Characters" });
+			m_commands.push_back({ 0, L"2" });
+			m_commands.push_back({ 1, L"Only Text" });
+			m_commands.push_back({ 0, L"3" });
+			m_commands.push_back({ 1, L"Show Character?" });
+			m_commands.push_back({ 5, L"1,Yes,2,No" });
+			m_commands.push_back({ 0, L"4" });
+			m_commands.push_back({ 1, L"Jump 2" });
+			m_commands.push_back({ 7, L"2" });
 			m_commands.push_back({ 0, L"-1" });
 		}
 
