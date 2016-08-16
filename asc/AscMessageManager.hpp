@@ -19,10 +19,15 @@ namespace asc
 
 		uint32 m_charCount;
 
+		std::function<void()> m_playLetterSound;
+
 	public:
 
-		MessageManager() :
-			m_charCount(0U)
+		MessageManager() = default;
+
+		MessageManager(std::function<void()> playLetterSound) :
+			m_charCount(0U),
+			m_playLetterSound(playLetterSound)
 		{
 			m_stopwatch.start();
 			m_stopwatch.pause();

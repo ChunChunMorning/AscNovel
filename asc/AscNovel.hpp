@@ -25,7 +25,7 @@ namespace asc
 
 		ChoiceManager m_choiceManager;
 
-		SoundManager m_SoundManager;
+		SoundManager m_soundManager;
 
 		MessageManager m_messageManager;
 
@@ -97,7 +97,8 @@ namespace asc
 		Novel() :
 			m_isUpdating(false),
 			m_currentLine(0),
-			m_lastSeekPoint(-1)
+			m_lastSeekPoint(-1),
+			m_messageManager(std::bind(&SoundManager::playLetterSound, m_soundManager))
 		{
 			m_commands.push_back({ 0, L"1"});
 			m_commands.push_back({ 3, L"1,character1,0,0,640,720" });
