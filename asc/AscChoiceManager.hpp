@@ -31,9 +31,9 @@ namespace asc
 
 		virtual ~ChoiceManager() = default;
 
-		void start(String text)
+		void start(String string)
 		{
-			const auto args = text.split(L',');
+			const auto args = string.split(L',');
 			Array<std::pair<int32, String>> choices;
 
 			for (auto i = 0u; i < args.size(); i += 2)

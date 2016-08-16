@@ -55,17 +55,18 @@ namespace asc
 
 			// AddSprite
 			case 3:
-				m_spriteManager.add(Sprite(m_commands[m_currentLine].second));
+				m_spriteManager.add<Sprite>(m_commands[m_currentLine].second);
 				break;
 
 			// AddFixedSprite
 			case 4:
-				m_spriteManager.add(FixedSprite(m_commands[m_currentLine].second));
+				m_spriteManager.add<FixedSprite>(m_commands[m_currentLine].second);
 				break;
 
 			// Choice
 			case 5:
 				m_choiceManager.start(m_commands[m_currentLine].second);
+				break;
 
 			default:
 				break;

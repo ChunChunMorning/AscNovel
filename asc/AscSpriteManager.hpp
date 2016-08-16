@@ -19,9 +19,9 @@ namespace asc
 		virtual ~SpriteManager() = default;
 
 		template <class Type>
-		void add(const Type& sprite)
+		void add(const String& string)
 		{
-			m_sprites.push_back(std::make_unique<Type>(sprite));
+			m_sprites.push_back(std::make_unique<Type>(string));
 		}
 
 		void erase(int id)
