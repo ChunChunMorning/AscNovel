@@ -72,7 +72,11 @@ namespace asc
 			if (charCount > m_charCount)
 			{
 				m_charCount = charCount;
-				m_playLetterSound();
+
+				if (m_text[charCount - 1] != L' ')
+				{
+					m_playLetterSound();
+				}
 			}
 		}
 
