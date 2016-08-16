@@ -20,7 +20,7 @@ namespace asc
 			// ToDo Configurable
 			const String letterSound = L"letter";
 
-			SoundAsset(letterSound).play();
+			SoundAsset(letterSound).playMulti();
 		}
 
 	};
