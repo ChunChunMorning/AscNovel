@@ -4,11 +4,11 @@
 void Main()
 {
 	Window::Resize(1280, 720);
-	TextureAsset::Register(L"character1", L"character1.png");
-	TextureAsset::Register(L"character2", L"character2.png");
-	TextureAsset::Register(L"character3", L"character3.png");
-	TextureAsset::Register(L"test_message_box", L"test_message_box.png");
-	TextureAsset::Register(L"test_choice_box", L"test_choice_box.png");
+	TextureAsset::Register(L"character1", L"Assets/character1.png");
+	TextureAsset::Register(L"character2", L"Assets/character2.png");
+	TextureAsset::Register(L"character3", L"Assets/character3.png");
+	TextureAsset::Register(L"test_message_box", L"Assets/test_message_box.png");
+	TextureAsset::Register(L"test_choice_box", L"Assets/test_choice_box.png");
 	FontAsset::Register(L"test_name", 30, L"メイリオ");
 	FontAsset::Register(L"test_text", 30, L"メイリオ");
 
