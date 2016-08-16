@@ -99,10 +99,9 @@ namespace asc
 					Parse<int32>(command.second) == seekPoint
 				)
 				{
-					m_isUpdating = true;
-					m_messageManager.clear();
-					m_spriteManager.clear();
+					clear();
 					m_currentLine = index + 1;
+					m_isUpdating = true;
 
 					return true;
 				}
@@ -123,6 +122,14 @@ namespace asc
 			}
 
 			m_messageManager.update();
+			m_choiceManager.update();
+		}
+
+		void clear()
+		{
+			m_messageManager.clear();
+			m_spriteManager.clear();
+			m_choiceManager.clear();
 		}
 
 		bool isUpdating()

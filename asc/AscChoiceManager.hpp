@@ -18,6 +18,10 @@ namespace asc
 
 		bool m_isUpdating;
 
+		int32 m_lastSelectedSeekPoint;
+
+		int32 m_selected;
+
 		Array<Choice> m_choices;
 
 	public:
@@ -59,12 +63,39 @@ namespace asc
 
 		void update()
 		{
-			
+			if(!m_isUpdating)
+				return;
+
+			const KeyCombination m_submit = Input::KeyEnter | Gamepad(0).button(0);
+			const KeyCombination m_up = Input::KeyUp | Gamepad(0).povForward;
+			const KeyCombination m_down = Input::KeyDown | Gamepad(0).povBackward;
+
+			if (m_submit.clicked)
+			{
+				m_lastSelectedSeekPoint = m_choices[m_selected].seekPoint;
+				m_isUpdating = false;
+				return;
+			}
+
+			if (m_up.clicked)
+			{
+				m_selected = Max<int32>(m_selected - 1, 0);
+			}
+			if (m_down.clicked)
+			{
+				m_selected = Min<int32>(m_selected + 1, m_choices.size() - 1);
+			}
 		}
 
 		void clear()
 		{
-			
+			m_selected = 0;
+			m_choices.clear();
+		}
+
+		int32 lastSelectedSeekPoint() const
+		{
+			return m_lastSelectedSeekPoint;
 		}
 
 		void draw() const
@@ -77,13 +108,14 @@ namespace asc
 			const String m_choiceBoxTexture = L"test_choice_box";
 			const String m_textFont = L"test_text";
 			const Color m_textColor = Palette::Black;
-
+			const Color m_selectedColor = Palette::Red;
 
 			m_choiceBox(TextureAsset(m_choiceBoxTexture)).draw();
 
 			for (auto i = 0u; i < m_choices.size(); i++)
 			{
-				FontAsset(m_textFont)(m_choices[i].text).draw(m_choices[i].position);
+				const auto color = static_cast<int32>(i) == m_selected ? m_selectedColor : m_textColor;
+				FontAsset(m_textFont)(m_choices[i].text).draw(m_choices[i].position, color);
 			}
 		}
 
