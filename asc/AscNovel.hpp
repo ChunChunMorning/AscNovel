@@ -68,6 +68,11 @@ namespace asc
 				m_choiceManager.start(m_commands[m_currentLine].second);
 				break;
 
+			// Jump
+			case 7:
+				start(Parse<int32>(m_commands[m_currentLine].second));
+				return;
+
 			default:
 				break;
 			}
