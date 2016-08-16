@@ -26,6 +26,13 @@ namespace asc
 
 		SpriteManager m_spriteManager;
 
+		void clearManager()
+		{
+			m_messageManager.clear();
+			m_spriteManager.clear();
+			m_choiceManager.clear();
+		}
+
 		void execute()
 		{
 			switch (m_commands[m_currentLine].first)
@@ -99,7 +106,7 @@ namespace asc
 					Parse<int32>(command.second) == seekPoint
 				)
 				{
-					clear();
+					clearManager();
 					m_currentLine = index + 1;
 					m_isUpdating = true;
 
@@ -125,14 +132,7 @@ namespace asc
 			m_choiceManager.update();
 		}
 
-		void clear()
-		{
-			m_messageManager.clear();
-			m_spriteManager.clear();
-			m_choiceManager.clear();
-		}
-
-		bool isUpdating()
+		bool isUpdating() const
 		{
 			return m_isUpdating;
 		}
