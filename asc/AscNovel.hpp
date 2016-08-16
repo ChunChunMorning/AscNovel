@@ -69,7 +69,7 @@ namespace asc
 				break;
 
 			// Jump
-			case 7:
+			case 6:
 				start(Parse<int32>(m_commands[m_currentLine].second));
 				return;
 
@@ -97,7 +97,7 @@ namespace asc
 			m_commands.push_back({ 5, L"1,Yes,2,No" });
 			m_commands.push_back({ 0, L"4" });
 			m_commands.push_back({ 1, L"Jump 2" });
-			m_commands.push_back({ 7, L"2" });
+			m_commands.push_back({ 6, L"2" });
 			m_commands.push_back({ 0, L"-1" });
 		}
 
