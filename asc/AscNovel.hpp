@@ -18,6 +18,8 @@ namespace asc
 
 		int32 m_currentLine;
 
+		int32 m_lastSeekPoint;
+
 		Array<Commnad> m_commands;
 
 		ChoiceManager m_choiceManager;
@@ -40,6 +42,7 @@ namespace asc
 			// Point
 			case 0:
 				m_isUpdating = false;
+				m_lastSeekPoint = Parse<int32>(m_commands[m_currentLine].second);
 				return;
 
 			// Text
@@ -73,6 +76,12 @@ namespace asc
 				start(Parse<int32>(m_commands[m_currentLine].second));
 				return;
 
+			// AutomaticText
+			case 7:
+				m_messageManager.setText(m_commands[m_currentLine].second);
+				m_messageManager.start(true);
+				break;
+
 			default:
 				break;
 			}
@@ -84,7 +93,8 @@ namespace asc
 
 		Novel() :
 			m_isUpdating(false),
-			m_currentLine(0)
+			m_currentLine(0),
+			m_lastSeekPoint(-1)
 		{
 			m_commands.push_back({ 0, L"1"});
 			m_commands.push_back({ 3, L"1,character1,0,0,640,720" });
@@ -93,7 +103,7 @@ namespace asc
 			m_commands.push_back({ 0, L"2" });
 			m_commands.push_back({ 1, L"Only Text" });
 			m_commands.push_back({ 0, L"3" });
-			m_commands.push_back({ 1, L"Show Character?" });
+			m_commands.push_back({ 7, L"Show Character?" });
 			m_commands.push_back({ 5, L"1,Yes,2,No" });
 			m_commands.push_back({ 0, L"4" });
 			m_commands.push_back({ 1, L"Jump 2" });
@@ -146,6 +156,11 @@ namespace asc
 		bool isUpdating() const
 		{
 			return m_isUpdating;
+		}
+
+		int32 seekPoint() const
+		{
+			return m_lastSeekPoint;
 		}
 
 		void draw() const

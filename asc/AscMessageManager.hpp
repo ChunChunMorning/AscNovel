@@ -9,6 +9,8 @@ namespace asc
 	{
 	private:
 
+		bool m_isAutomatic;
+
 		Stopwatch m_stopwatch;
 
 		String m_name;
@@ -28,10 +30,11 @@ namespace asc
 
 		virtual ~MessageManager() = default;
 
-		void start()
+		void start(bool isAutomatic = false)
 		{
 			m_stopwatch.restart();
 			m_charCount = 0U;
+			m_isAutomatic = isAutomatic;
 		}
 
 		void update()
@@ -49,7 +52,7 @@ namespace asc
 
 			if (m_stopwatch.ms() >= typingTime)
 			{
-				if (m_stopwatch.ms() >= typingTime + m_textWait && (Input::KeyEnter.clicked || Input::KeyQ.pressed))
+				if (m_stopwatch.ms() >= typingTime + m_textWait && (Input::KeyEnter.clicked || Input::KeyQ.pressed || m_isAutomatic))
 				{
 					m_stopwatch.pause();
 					return;
