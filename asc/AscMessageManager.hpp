@@ -60,7 +60,6 @@ namespace asc
 				if (m_stopwatch.ms() >= typingTime + m_textWait && (Input::KeyEnter.clicked || Input::KeyQ.pressed || m_isAutomatic))
 				{
 					m_stopwatch.pause();
-					return;
 				}
 			}
 			else if(Input::KeyEnter.clicked || Input::KeyQ.pressed)
@@ -68,7 +67,13 @@ namespace asc
 				m_stopwatch.set(static_cast<Milliseconds>(m_text.length * m_textSpeed));
 			}
 
-			m_charCount = static_cast<int>(m_stopwatch.ms() / m_textSpeed);
+			const auto charCount = Min<uint32>(m_stopwatch.ms() / m_textSpeed, m_text.length);
+
+			if (charCount > m_charCount)
+			{
+				m_charCount = charCount;
+				m_playLetterSound();
+			}
 		}
 
 		void setName(const String& name)
