@@ -135,6 +135,7 @@ namespace asc
 				!m_choiceManager.isUpdating()
 			)
 			{
+				m_choiceManager.lastSelectedSeekPoint().then([&](int32 seekPoint){ start(seekPoint); });
 				execute();
 			}
 

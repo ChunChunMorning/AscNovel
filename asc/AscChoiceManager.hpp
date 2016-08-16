@@ -18,7 +18,7 @@ namespace asc
 
 		bool m_isUpdating;
 
-		int32 m_lastSelectedSeekPoint;
+		Optional<int32> m_lastSelectedSeekPoint;
 
 		int32 m_selected;
 
@@ -27,7 +27,8 @@ namespace asc
 	public:
 
 		ChoiceManager() :
-			m_isUpdating(false) {}
+			m_isUpdating(false),
+			m_lastSelectedSeekPoint(none) {}
 
 		virtual ~ChoiceManager() = default;
 
@@ -89,12 +90,13 @@ namespace asc
 
 		void clear()
 		{
+			m_lastSelectedSeekPoint = none;
 			m_selected = 0;
 			m_choices.clear();
 			m_isUpdating = false;
 		}
 
-		int32 lastSelectedSeekPoint() const
+		Optional<int32> lastSelectedSeekPoint() const
 		{
 			return m_lastSelectedSeekPoint;
 		}
