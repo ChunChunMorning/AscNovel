@@ -80,6 +80,11 @@ namespace asc
 
 
 			m_choiceBox(TextureAsset(m_choiceBoxTexture)).draw();
+
+			for (auto i = 0u; i < m_choices.size(); i++)
+			{
+				FontAsset(m_textFont)(m_choices[i].text).draw(m_choices[i].position);
+			}
 		}
 
 		bool isUpdating() const
