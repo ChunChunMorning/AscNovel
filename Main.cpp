@@ -9,6 +9,7 @@ void Main()
 	TextureAsset::Register(L"character3", L"Assets/character3.png");
 	TextureAsset::Register(L"test_message_box", L"Assets/test_message_box.png");
 	TextureAsset::Register(L"test_choice_box", L"Assets/test_choice_box.png");
+	SoundAsset::Register(L"letter", L"Example/Sound.mp3");
 	FontAsset::Register(L"test_name", 30, L"メイリオ");
 	FontAsset::Register(L"test_text", 30, L"メイリオ");
 
@@ -16,7 +17,7 @@ void Main()
 
 	while (System::Update())
 	{
-		if(Input::Key0.clicked)
+		if (Input::Key0.clicked)
 			novel.start(0);
 
 		if(Input::Key1.clicked)

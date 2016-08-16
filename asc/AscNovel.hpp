@@ -2,6 +2,7 @@
 # include <Siv3D.hpp>
 # include "AscChoiceManager.hpp"
 # include "AscMessageManager.hpp"
+# include "AscSoundManager.hpp"
 # include "AscSpriteManager.hpp"
 
 namespace asc
@@ -23,6 +24,8 @@ namespace asc
 		Array<Commnad> m_commands;
 
 		ChoiceManager m_choiceManager;
+
+		SoundManager m_SoundManager;
 
 		MessageManager m_messageManager;
 
