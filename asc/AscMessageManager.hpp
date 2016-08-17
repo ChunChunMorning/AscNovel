@@ -23,8 +23,6 @@ namespace asc
 
 	public:
 
-		MessageManager() = default;
-
 		MessageManager(std::function<void()> onCountChar) :
 			m_charCount(0U),
 			m_onCountChar(onCountChar)
