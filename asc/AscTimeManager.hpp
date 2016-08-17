@@ -38,7 +38,7 @@ namespace asc
 
 		bool isUpdating() const
 		{
-			m_time > m_stopwatch.ms();
+			return m_time > m_stopwatch.ms();
 		}
 
 	};

@@ -4,6 +4,7 @@
 # include "AscMessageManager.hpp"
 # include "AscSoundManager.hpp"
 # include "AscSpriteManager.hpp"
+# include "AscTimeManager.hpp"
 
 namespace asc
 {
@@ -31,11 +32,14 @@ namespace asc
 
 		SpriteManager m_spriteManager;
 
+		TimeManager m_timeManager;
+
 		void clearManager()
 		{
 			m_messageManager.clear();
 			m_spriteManager.clear();
 			m_choiceManager.clear();
+			m_timeManager.clear();
 		}
 
 		void execute()
@@ -114,6 +118,11 @@ namespace asc
 				m_spriteManager.erase(m_commands[m_currentLine].second);
 				break;
 
+			// Wait
+			case 14:
+				m_timeManager.wait(m_commands[m_currentLine].second);
+				break;
+
 			default:
 				break;
 			}
@@ -170,6 +179,10 @@ namespace asc
 			m_commands.push_back({ 1, L"Bring 1" });
 			m_commands.push_back({ 13, L"3" });
 			m_commands.push_back({ 1, L"Erase 3" });
+			m_commands.push_back({ 0, L"8" });
+			m_commands.push_back({ 7, L"Wait 3 second" });
+			m_commands.push_back({ 14, L"3000" });
+			m_commands.push_back({ 1, L"fin" });
 			m_commands.push_back({ 0, L"-1" });
 		}
 
@@ -205,7 +218,8 @@ namespace asc
 			while (
 				m_isUpdating &&
 				!m_messageManager.isUpdating() &&
-				!m_choiceManager.isUpdating()
+				!m_choiceManager.isUpdating() &&
+				!m_timeManager.isUpdating()
 			)
 			{
 				m_choiceManager.lastSelectedSeekPoint().then([&](int32 seekPoint){ start(seekPoint); });
