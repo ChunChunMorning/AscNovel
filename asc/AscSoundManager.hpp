@@ -26,5 +26,27 @@ namespace asc
 			}
 		}
 
+		void playMoveSound()
+		{
+			// ToDo Configurable
+			const String moveSound = L"move";
+
+			if (SoundAsset::IsRegistered(moveSound))
+			{
+				SoundAsset(moveSound).playMulti();
+			}
+		}
+
+		void playSubmitSound()
+		{
+			// ToDo Configurable
+			const String submitSound = L"submit";
+
+			if (SoundAsset::IsRegistered(submitSound))
+			{
+				SoundAsset(submitSound).playMulti();
+			}
+		}
+
 	};
 }
