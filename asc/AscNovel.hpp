@@ -10,11 +10,11 @@ namespace asc
 {
 	using namespace s3d;
 
-	using Commnad = std::pair<int32, String>;
-
 	class Novel
 	{
 	private:
+
+		using Commnad = std::pair<int32, String>;
 
 		bool m_isUpdating;
 
@@ -246,6 +246,41 @@ namespace asc
 			m_spriteManager.draw();
 			m_messageManager.draw();
 			m_choiceManager.draw();
+		}
+
+		Novel& setKey(const KeyCombination& up, const KeyCombination& down, const KeyCombination& submit)
+		{
+			m_choiceManager.setKey(up, down, submit);
+
+			return *this;
+		}
+
+		Novel& setColor(const Color& unselected, const Color& selected)
+		{
+			m_choiceManager.setColor(unselected, selected);
+
+			return *this;
+		}
+
+		Novel& setChoicePosition(const Point& position)
+		{
+			m_choiceManager.setPosition(position);
+
+			return *this;
+		}
+
+		Novel& setChoiceTexture(const TextureAssetName texture, const Rect& region)
+		{
+			m_choiceManager.setTexture(texture, region);
+
+			return *this;
+		}
+
+		Novel& setFont(const FontAssetName& font)
+		{
+			m_choiceManager.setFont(font);
+
+			return *this;
 		}
 	};
 }

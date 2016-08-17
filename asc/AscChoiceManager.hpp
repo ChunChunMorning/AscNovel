@@ -5,6 +5,9 @@ namespace asc
 {
 	using namespace s3d;
 
+	using TextureAssetName = String;
+	using FontAssetName = String;
+
 	struct Choice
 	{
 		int32 seekPoint;
@@ -24,23 +27,37 @@ namespace asc
 
 		Array<Choice> m_choices;
 
+		KeyCombination m_keyUp;
+
+		KeyCombination m_keyDown;
+
+		KeyCombination m_keySubmit;
+
+		TextureAssetName m_texture;
+
+		FontAssetName m_font;
+
+		Color m_unselectedColor;
+
+		Color m_selectedColor;
+
+		Rect m_region;
+
+		Point m_position;
+
 		std::function<void()> m_onMove;
 
 		std::function<void()> m_onSubmit;
 
 		int32 select()
 		{
-			// ToDo Configurable
-			const KeyCombination m_up = Input::KeyUp | Gamepad(0).povForward;
-			const KeyCombination m_down = Input::KeyDown | Gamepad(0).povBackward;
-
 			auto selected = m_selected;
 
-			if (m_up.clicked)
+			if (m_keyUp.clicked)
 			{
 				selected = Max<int32>(m_selected - 1, 0);
 			}
-			if (m_down.clicked)
+			if (m_keyDown.clicked)
 			{
 				selected = Min<int32>(m_selected + 1, m_choices.size() - 1);
 			}
@@ -56,10 +73,39 @@ namespace asc
 		) :
 			m_isUpdating(false),
 			m_lastSelectedSeekPoint(none),
+			m_unselectedColor(Palette::Black),
+			m_selectedColor(Palette::Red),
 			m_onMove(onMove),
 			m_onSubmit(onSubmit) {}
 
-		virtual ~ChoiceManager() = default;
+		void setKey(const KeyCombination& submit, const KeyCombination& up, const KeyCombination& down)
+		{
+			m_keySubmit = submit;
+			m_keyUp = up;
+			m_keyDown = down;
+		}
+
+		void setTexture(const TextureAssetName& texture, const Rect& region)
+		{
+			m_texture = texture;
+			m_region = region;
+		}
+
+		void setFont(const FontAssetName& font)
+		{
+			m_font = font;
+		}
+
+		void setColor(const Color& unselected, const Color& selected)
+		{
+			m_unselectedColor = unselected;
+			m_selectedColor = selected;
+		}
+
+		void setPosition(const Point& position)
+		{
+			m_position = position;
+		}
 
 		void start(String string)
 		{
@@ -76,16 +122,12 @@ namespace asc
 
 		void start(const Array<std::pair<int32, String>>& choices)
 		{
-			// ToDo Configurable
-			const Point m_textPosition(870, 340);
-			const String m_textFont = L"test_text";
-
-			Point position = m_textPosition;
+			Point position = m_position;
 
 			for (const auto& c : choices)
 			{
 				m_choices.push_back({c.first, c.second, position});
-				position.y += FontAsset(m_textFont)(c.second).region().h;
+				position.y += FontAsset(m_font)(c.second).region().h;
 			}
 
 			m_isUpdating = true;
@@ -128,30 +170,23 @@ namespace asc
 			return m_lastSelectedSeekPoint;
 		}
 
+		bool isUpdating() const
+		{
+			return m_isUpdating;
+		}
+
 		void draw() const
 		{
 			if(!m_isUpdating)
 				return;
 
-			// ToDo Configurable
-			const Rect m_choiceBox(850, 330, 400, 160);
-			const String m_choiceBoxTexture = L"test_choice_box";
-			const String m_textFont = L"test_text";
-			const Color m_textColor = Palette::Black;
-			const Color m_selectedColor = Palette::Red;
-
-			m_choiceBox(TextureAsset(m_choiceBoxTexture)).draw();
+			m_region(TextureAsset(m_texture)).draw();
 
 			for (auto i = 0u; i < m_choices.size(); i++)
 			{
-				const auto color = static_cast<int32>(i) == m_selected ? m_selectedColor : m_textColor;
-				FontAsset(m_textFont)(m_choices[i].text).draw(m_choices[i].position, color);
+				const auto color = static_cast<int32>(i) == m_selected ? m_selectedColor : m_unselectedColor;
+				FontAsset(m_font)(m_choices[i].text).draw(m_choices[i].position, color);
 			}
-		}
-
-		bool isUpdating() const
-		{
-			return m_isUpdating;
 		}
 
 	};

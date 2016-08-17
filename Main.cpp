@@ -8,16 +8,21 @@ void Main()
 	TextureAsset::Register(L"character2", L"Assets/character2.png");
 	TextureAsset::Register(L"character3", L"Assets/character3.png");
 	TextureAsset::Register(L"test_message_box", L"Assets/test_message_box.png");
-	TextureAsset::Register(L"test_choice_box", L"Assets/test_choice_box.png");
+	TextureAsset::Register(L"choice", L"Assets/test_choice_box.png");
 	SoundAsset::Register(L"char", L"Example/Sound.mp3");
 	SoundAsset::Register(L"move", L"Example/Sound.mp3");
 	SoundAsset::Register(L"submit", L"Example/Sound.mp3");
 	SoundAsset::Register(L"bgm1", L"Example/風の丘.mp3");
 	SoundAsset::Register(L"bgm2", L"Example/風の丘.mp3");
-	FontAsset::Register(L"test_name", 30, L"メイリオ");
-	FontAsset::Register(L"test_text", 30, L"メイリオ");
+	FontAsset::Register(L"name", 32, L"メイリオ");
+	FontAsset::Register(L"text", 30, L"メイリオ");
 
 	asc::Novel novel;
+
+	novel
+		.setFont(L"text")
+		.setChoiceTexture(L"choice", Rect(850, 330, 400, 160))
+		.setChoicePosition({870, 340});
 
 	while (System::Update())
 	{
