@@ -15,12 +15,15 @@ namespace asc
 
 		virtual ~SoundManager() = default;
 
-		void playLetterSound()
+		void playCharSound()
 		{
 			// ToDo Configurable
-			const String letterSound = L"letter";
+			const String charSound = L"char";
 
-			SoundAsset(letterSound).playMulti();
+			if (SoundAsset::IsRegistered(charSound))
+			{
+				SoundAsset(charSound).playMulti();
+			}
 		}
 
 	};
