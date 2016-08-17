@@ -55,6 +55,27 @@ namespace asc
 			}
 		}
 
+		void bring(const String& string)
+		{
+			bring(Parse<int32>(string));
+		}
+
+		void bring(int32 id)
+		{
+			std::sort(
+				m_sprites.begin(),
+				m_sprites.end(),
+				[&](const std::unique_ptr<Sprite>& e1, const std::unique_ptr<Sprite>& e2)
+			{
+				if (e1->getID() == id)
+					return false;
+				else if (e2->getID() == id)
+					return true;
+				return true;
+			}
+			);
+		}
+
 		void erase(int id)
 		{
 			Erase_if(m_sprites, [&](const std::unique_ptr<Sprite>& sprite){ return id == sprite->getID(); });

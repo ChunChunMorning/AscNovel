@@ -104,6 +104,11 @@ namespace asc
 				m_spriteManager.lightUpSpot(m_commands[m_currentLine].second);
 				break;
 
+			// Bring
+			case 12:
+				m_spriteManager.bring(m_commands[m_currentLine].second);
+				break;
+
 			default:
 				break;
 			}
@@ -156,6 +161,8 @@ namespace asc
 			m_commands.push_back({ 1, L"Light Down" });
 			m_commands.push_back({ 11, L"1" });
 			m_commands.push_back({ 1, L"Spot Light" });
+			m_commands.push_back({ 12, L"1" });
+			m_commands.push_back({ 1, L"Bring 1" });
 			m_commands.push_back({ 0, L"-1" });
 		}
 
