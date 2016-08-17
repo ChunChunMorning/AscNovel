@@ -40,7 +40,7 @@ namespace asc
 
 		virtual ~Sprite() = default;
 
-		virtual bool lightUp(bool light)
+		bool lightUp(bool light)
 		{
 			return m_light = light;
 		}
@@ -63,18 +63,9 @@ namespace asc
 
 		FixedSprite() = default;
 
-		FixedSprite(const String& string) :
-			Sprite(string)
-		{
-			m_light = true;
-		}
+		FixedSprite(const String& string) : Sprite(string) {}
 
 		virtual ~FixedSprite() = default;
-
-		virtual bool lightUp(bool light) override
-		{
-			return m_light;
-		}
 
 		virtual void draw() const override
 		{
