@@ -45,7 +45,6 @@ namespace asc
 			// Point
 			case 0:
 				m_isUpdating = false;
-				m_lastSeekPoint = Parse<int32>(m_commands[m_currentLine].second);
 				return;
 
 			// Text
@@ -132,6 +131,7 @@ namespace asc
 				{
 					clearManager();
 					m_currentLine = index + 1;
+					m_lastSeekPoint = seekPoint;
 					m_isUpdating = true;
 
 					return true;
