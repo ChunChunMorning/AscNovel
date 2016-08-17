@@ -7,7 +7,7 @@ void Main()
 	TextureAsset::Register(L"character1", L"Assets/character1.png");
 	TextureAsset::Register(L"character2", L"Assets/character2.png");
 	TextureAsset::Register(L"character3", L"Assets/character3.png");
-	TextureAsset::Register(L"test_message_box", L"Assets/test_message_box.png");
+	TextureAsset::Register(L"message", L"Assets/test_message_box.png");
 	TextureAsset::Register(L"choice", L"Assets/test_choice_box.png");
 	SoundAsset::Register(L"char", L"Example/Sound.mp3");
 	SoundAsset::Register(L"move", L"Example/Sound.mp3");
@@ -20,9 +20,13 @@ void Main()
 	asc::Novel novel;
 
 	novel
-		.setFont(L"text")
+		.setFont(L"text", L"name")
+		.setColor(Palette::Black, Palette::Red)
+		.setMessageTexture(L"message", Rect(6, 440, 1268, 285))
+		.setMessagePosition({60, 575}, {40, 525})
 		.setChoiceTexture(L"choice", Rect(850, 330, 400, 160))
-		.setChoicePosition({870, 340});
+		.setChoicePosition({870, 340})
+		.setKey(KeyCombination(Input::KeyEnter), KeyCombination(Input::KeySpace), KeyCombination(Input::KeyUp), KeyCombination(Input::KeyDown));
 
 	while (System::Update())
 	{

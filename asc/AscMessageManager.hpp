@@ -5,6 +5,9 @@ namespace asc
 {
 	using namespace s3d;
 
+	using TextureAssetName = String;
+	using FontAssetName = String;
+
 	class MessageManager
 	{
 	private:
@@ -13,11 +16,33 @@ namespace asc
 
 		Stopwatch m_stopwatch;
 
-		String m_name;
+		uint32 m_charCount;
 
 		String m_text;
 
-		uint32 m_charCount;
+		String m_name;
+
+		KeyCombination m_submit;
+
+		KeyCombination m_skip;
+
+		int32 m_speed;
+		
+		int32 m_time;
+
+		TextureAssetName m_texture;
+
+		FontAssetName m_textFont;
+
+		FontAssetName m_nameFont;
+
+		Color m_color;
+
+		Rect m_region;
+
+		Point m_textPosition;
+
+		Point m_namePosition;
 
 		std::function<void()> m_onCountChar;
 
@@ -25,57 +50,12 @@ namespace asc
 
 		MessageManager(std::function<void()> onCountChar) :
 			m_charCount(0U),
+			m_speed(100),
+			m_time(100),
 			m_onCountChar(onCountChar)
 		{
 			m_stopwatch.start();
 			m_stopwatch.pause();
-		}
-
-		virtual ~MessageManager() = default;
-
-		void start(bool isAutomatic = false)
-		{
-			m_stopwatch.restart();
-			m_charCount = 0U;
-			m_isAutomatic = isAutomatic;
-		}
-
-		void update()
-		{
-			// ToDo Configurable
-			const int32 m_textSpeed = 100;
-			const int32 m_textWait = 100;
-
-
-
-			if(m_stopwatch.isPaused())
-				return;
-
-			const auto typingTime = static_cast<int32>(m_text.length) * m_textSpeed;
-
-			if (m_stopwatch.ms() >= typingTime)
-			{
-				if (m_stopwatch.ms() >= typingTime + m_textWait && (Input::KeyEnter.clicked || Input::KeyQ.pressed || m_isAutomatic))
-				{
-					m_stopwatch.pause();
-				}
-			}
-			else if(Input::KeyEnter.clicked || Input::KeyQ.pressed)
-			{
-				m_stopwatch.set(static_cast<Milliseconds>(m_text.length * m_textSpeed));
-			}
-
-			const auto charCount = Min<uint32>(m_stopwatch.ms() / m_textSpeed, m_text.length);
-
-			if (charCount > m_charCount)
-			{
-				m_charCount = charCount;
-
-				if (m_text[charCount - 1] != L' ')
-				{
-					m_onCountChar();
-				}
-			}
 		}
 
 		void setName(const String& name)
@@ -88,6 +68,84 @@ namespace asc
 			m_text = text;
 		}
 
+		void setKey(const KeyCombination& submit, const KeyCombination& skip)
+		{
+			m_submit = submit;
+			m_skip = skip;
+		}
+
+		void setSpeed(int32 speed)
+		{
+			m_speed = speed;
+		}
+
+		void setTime(int32 time)
+		{
+			m_time = time;
+		}
+
+		void setTexture(const TextureAssetName& texture, const Rect& region)
+		{
+			m_texture = texture;
+			m_region = region;
+		}
+
+		void setFont(const FontAssetName& text, const FontAssetName& name)
+		{
+			m_textFont = text;
+			m_nameFont = name;
+		}
+
+		void setColor(const Color& color)
+		{
+			m_color = color;
+		}
+
+		void setPosition(const Point& text, const Point& name)
+		{
+			m_textPosition = text;
+			m_namePosition = name;
+		}
+
+		void start(bool isAutomatic = false)
+		{
+			m_stopwatch.restart();
+			m_charCount = 0U;
+			m_isAutomatic = isAutomatic;
+		}
+
+		void update()
+		{
+			if(m_stopwatch.isPaused())
+				return;
+
+			const auto typingTime = static_cast<int32>(m_text.length) * m_speed;
+
+			if (m_stopwatch.ms() >= typingTime)
+			{
+				if (m_stopwatch.ms() >= typingTime + m_time && (m_submit.clicked || m_skip.pressed || m_isAutomatic))
+				{
+					m_stopwatch.pause();
+				}
+			}
+			else if(m_submit.clicked || m_skip.pressed)
+			{
+				m_stopwatch.set(static_cast<Milliseconds>(m_text.length * m_speed));
+			}
+
+			const auto charCount = Min<uint32>(m_stopwatch.ms() / m_speed, m_text.length);
+
+			if (charCount > m_charCount)
+			{
+				m_charCount = charCount;
+
+				if (m_text[charCount - 1] != L' ')
+				{
+					m_onCountChar();
+				}
+			}
+		}
+
 		void clear()
 		{
 			m_name.clear();
@@ -95,28 +153,17 @@ namespace asc
 			m_stopwatch.pause();
 		}
 
-		void draw() const
-		{
-			// ToDo Configurable
-			const Rect m_messageBox(6, 440, 1268, 285);
-			const Point m_namePosition(40, 525);
-			const Point m_textPosition(60, 575);
-			const String m_messageBoxTexture = L"test_message_box";
-			const String m_nameFont = L"test_name";
-			const String m_textFont = L"test_text";
-			const Color m_messageColor = Palette::Black;
-
-
-
-			m_messageBox(TextureAsset(m_messageBoxTexture)).draw();
-
-			FontAsset(m_nameFont).draw(m_name, m_namePosition, m_messageColor);
-			FontAsset(m_textFont).draw(m_text.substr(0U, m_charCount), m_textPosition, m_messageColor);
-		}
-
 		bool isUpdating() const
 		{
 			return !m_stopwatch.isPaused();
+		}
+
+		void draw() const
+		{
+			m_region(TextureAsset(m_texture)).draw();
+
+			FontAsset(m_nameFont).draw(m_name, m_namePosition, m_color);
+			FontAsset(m_textFont).draw(m_text.substr(0U, m_charCount), m_textPosition, m_color);
 		}
 
 	};

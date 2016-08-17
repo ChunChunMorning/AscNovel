@@ -26,9 +26,9 @@ namespace asc
 
 		ChoiceManager m_choiceManager;
 
-		SoundManager m_soundManager;
-
 		MessageManager m_messageManager;
+
+		SoundManager m_soundManager;
 
 		SpriteManager m_spriteManager;
 
@@ -248,23 +248,54 @@ namespace asc
 			m_choiceManager.draw();
 		}
 
-		Novel& setKey(const KeyCombination& up, const KeyCombination& down, const KeyCombination& submit)
+		Novel& setSpeed(int32 speed)
 		{
-			m_choiceManager.setKey(up, down, submit);
+			m_messageManager.setSpeed(speed);
 
 			return *this;
 		}
 
-		Novel& setColor(const Color& unselected, const Color& selected)
+		Novel& setWaitingTime(int32 time)
 		{
-			m_choiceManager.setColor(unselected, selected);
+			m_messageManager.setTime(time);
 
 			return *this;
 		}
 
-		Novel& setChoicePosition(const Point& position)
+		Novel& setKey(const KeyCombination& submit, const KeyCombination& skip)
 		{
-			m_choiceManager.setPosition(position);
+			m_messageManager.setKey(submit, skip);
+
+			return *this;
+		}
+
+		Novel& setKey(const KeyCombination& submit, const KeyCombination& skip, const KeyCombination& up, const KeyCombination& down)
+		{
+			m_messageManager.setKey(submit, skip);
+			m_choiceManager.setKey(submit, up, down);
+
+			return *this;
+		}
+
+		Novel& setFont(const FontAssetName& text, const FontAssetName& name = L"")
+		{
+			m_messageManager.setFont(text, name);
+			m_choiceManager.setFont(text);
+
+			return *this;
+		}
+
+		Novel& setColor(const Color& color, const Color& selectedColor = Palette::Red)
+		{
+			m_messageManager.setColor(color);
+			m_choiceManager.setColor(color, selectedColor);
+
+			return *this;
+		}
+
+		Novel& setMessageTexture(const TextureAssetName& texture, const Rect& region)
+		{
+			m_messageManager.setTexture(texture, region);
 
 			return *this;
 		}
@@ -276,11 +307,19 @@ namespace asc
 			return *this;
 		}
 
-		Novel& setFont(const FontAssetName& font)
+		Novel& setMessagePosition(const Point& text, const Point& name = Point::Zero)
 		{
-			m_choiceManager.setFont(font);
+			m_messageManager.setPosition(text, name);
 
 			return *this;
 		}
+
+		Novel& setChoicePosition(const Point& position)
+		{
+			m_choiceManager.setPosition(position);
+
+			return *this;
+		}
+
 	};
 }
