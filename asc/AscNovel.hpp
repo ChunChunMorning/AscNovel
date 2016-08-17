@@ -94,6 +94,16 @@ namespace asc
 				m_soundManager.stopBGM(m_commands[m_currentLine].second);
 				break;
 
+			// Lihgt Up
+			case 10:
+				m_spriteManager.lightUp(m_commands[m_currentLine].second);
+				break;
+
+			// Lihgt Up Spot
+			case 11:
+				m_spriteManager.lightUpSpot(m_commands[m_currentLine].second);
+				break;
+
 			default:
 				break;
 			}
@@ -136,6 +146,16 @@ namespace asc
 			m_commands.push_back({ 1, L"Play BGM2" });
 			m_commands.push_back({ 9, L"bgm2,0" });
 			m_commands.push_back({ 1, L"Stop BGM2" });
+			m_commands.push_back({ 0, L"7" });
+			m_commands.push_back({ 3, L"1,character1,0,0,640,720" });
+			m_commands.push_back({ 3, L"3,character3,0,180,320,360" });
+			m_commands.push_back({ 10, L"1,true" });
+			m_commands.push_back({ 10, L"3,true" });
+			m_commands.push_back({ 1, L"Light Up" });
+			m_commands.push_back({ 10, L"1,false" });
+			m_commands.push_back({ 1, L"Light Down" });
+			m_commands.push_back({ 11, L"1" });
+			m_commands.push_back({ 1, L"Spot Light" });
 			m_commands.push_back({ 0, L"-1" });
 		}
 
