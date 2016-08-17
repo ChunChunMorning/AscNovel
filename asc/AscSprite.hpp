@@ -11,7 +11,7 @@ namespace asc
 	{
 	private:
 
-		int m_id;
+		int32 m_id;
 
 	protected:
 
@@ -29,7 +29,7 @@ namespace asc
 		{
 			const auto args = string.split(L',');
 
-			m_id = Parse<int>(args[0]);
+			m_id = Parse<int32>(args[0]);
 			m_texture = args[1];
 			m_region.x = Parse<double>(args[2]);
 			m_region.y = Parse<double>(args[3]);
@@ -45,7 +45,7 @@ namespace asc
 			return m_light = light;
 		}
 
-		int getID() const
+		int32 getID() const
 		{
 			return m_id;
 		}
