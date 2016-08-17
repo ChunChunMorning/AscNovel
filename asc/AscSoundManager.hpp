@@ -26,9 +26,6 @@ namespace asc
 			}
 
 			Erase_if(m_BGMs, [](const std::unique_ptr<BGM>& bgm){ return bgm->isFinished(); });
-
-			ClearPrint();
-			Println(m_BGMs.size());
 		}
 
 		void playBGM(const String& string)
