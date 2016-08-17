@@ -26,9 +26,18 @@ namespace asc
 			}
 
 			Erase_if(m_BGMs, [](const std::unique_ptr<BGM>& bgm){ return bgm->isFinished(); });
+
+			ClearPrint();
+			Println(m_BGMs.size());
 		}
 
-		void playBGM(const String& bgm, int32 time = 0)
+		void playBGM(const String& string)
+		{
+			const auto args = string.split(L',');
+			playBGM(args[0], Parse<int32>(args[1]));
+		}
+
+		void playBGM(const String& bgm, int32 time)
 		{
 			if (time == 0)
 			{
@@ -39,7 +48,13 @@ namespace asc
 			m_BGMs.push_back(std::make_unique<FadeInBGM>(bgm, time));
 		}
 
-		void stopBGM(const String& bgm, int32 time = 0)
+		void stopBGM(const String& string)
+		{
+			const auto args = string.split(L',');
+			stopBGM(args[0], Parse<int32>(args[1]));
+		}
+
+		void stopBGM(const String& bgm, int32 time)
 		{
 			if (time == 0)
 			{

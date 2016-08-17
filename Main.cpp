@@ -12,6 +12,8 @@ void Main()
 	SoundAsset::Register(L"char", L"Example/Sound.mp3");
 	SoundAsset::Register(L"move", L"Example/Sound.mp3");
 	SoundAsset::Register(L"submit", L"Example/Sound.mp3");
+	SoundAsset::Register(L"bgm1", L"Example/風の丘.mp3");
+	SoundAsset::Register(L"bgm2", L"Example/風の丘.mp3");
 	FontAsset::Register(L"test_name", 30, L"メイリオ");
 	FontAsset::Register(L"test_text", 30, L"メイリオ");
 

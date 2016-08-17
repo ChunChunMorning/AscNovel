@@ -84,6 +84,16 @@ namespace asc
 				m_messageManager.start(true);
 				break;
 
+			// Play BGM
+			case 8:
+				m_soundManager.playBGM(m_commands[m_currentLine].second);
+				break;
+
+			// Stop BGM
+			case 9:
+				m_soundManager.stopBGM(m_commands[m_currentLine].second);
+				break;
+
 			default:
 				break;
 			}
@@ -117,6 +127,15 @@ namespace asc
 			m_commands.push_back({ 0, L"4" });
 			m_commands.push_back({ 1, L"Jump 2" });
 			m_commands.push_back({ 6, L"2" });
+			m_commands.push_back({ 0, L"5" });
+			m_commands.push_back({ 8, L"bgm1,3000" });
+			m_commands.push_back({ 1, L"Play BGM1" });
+			m_commands.push_back({ 0, L"6" });
+			m_commands.push_back({ 9, L"bgm1,3000" });
+			m_commands.push_back({ 8, L"bgm2,3000" });
+			m_commands.push_back({ 1, L"Play BGM2" });
+			m_commands.push_back({ 9, L"bgm2,0" });
+			m_commands.push_back({ 1, L"Stop BGM2" });
 			m_commands.push_back({ 0, L"-1" });
 		}
 
@@ -161,6 +180,7 @@ namespace asc
 
 			m_messageManager.update();
 			m_choiceManager.update();
+			m_soundManager.update();
 		}
 
 		bool isUpdating() const
