@@ -76,7 +76,12 @@ namespace asc
 			);
 		}
 
-		void erase(int id)
+		void erase(const String& string)
+		{
+			erase(Parse<int32>(string));
+		}
+
+		void erase(int32 id)
 		{
 			Erase_if(m_sprites, [&](const std::unique_ptr<Sprite>& sprite){ return id == sprite->getID(); });
 		}

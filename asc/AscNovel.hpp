@@ -109,6 +109,11 @@ namespace asc
 				m_spriteManager.bring(m_commands[m_currentLine].second);
 				break;
 
+			// Erase
+			case 13:
+				m_spriteManager.erase(m_commands[m_currentLine].second);
+				break;
+
 			default:
 				break;
 			}
@@ -163,6 +168,8 @@ namespace asc
 			m_commands.push_back({ 1, L"Spot Light" });
 			m_commands.push_back({ 12, L"1" });
 			m_commands.push_back({ 1, L"Bring 1" });
+			m_commands.push_back({ 13, L"3" });
+			m_commands.push_back({ 1, L"Erase 3" });
 			m_commands.push_back({ 0, L"-1" });
 		}
 
