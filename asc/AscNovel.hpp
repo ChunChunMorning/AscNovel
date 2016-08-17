@@ -98,11 +98,11 @@ namespace asc
 			m_currentLine(0),
 			m_lastSeekPoint(-1),
 			m_choiceManager(
-				std::bind(&SoundManager::playMoveSound, m_soundManager),
-				std::bind(&SoundManager::playSubmitSound, m_soundManager)
+				[&] { m_soundManager.playMoveSound(); },
+				[&] { m_soundManager.playSubmitSound(); }
 			),
 			m_messageManager(
-				std::bind(&SoundManager::playCharSound, m_soundManager)
+				[&] { m_soundManager.playCharSound(); }
 			)
 		{
 			m_commands.push_back({ 0, L"1"});
