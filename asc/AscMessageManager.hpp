@@ -19,15 +19,15 @@ namespace asc
 
 		uint32 m_charCount;
 
-		std::function<void()> m_playLetterSound;
+		std::function<void()> m_onCountChar;
 
 	public:
 
 		MessageManager() = default;
 
-		MessageManager(std::function<void()> playLetterSound) :
+		MessageManager(std::function<void()> onCountChar) :
 			m_charCount(0U),
-			m_playLetterSound(playLetterSound)
+			m_onCountChar(onCountChar)
 		{
 			m_stopwatch.start();
 			m_stopwatch.pause();
@@ -75,7 +75,7 @@ namespace asc
 
 				if (m_text[charCount - 1] != L' ')
 				{
-					m_playLetterSound();
+					m_onCountChar();
 				}
 			}
 		}
