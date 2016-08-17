@@ -10,6 +10,8 @@ void Main()
 	TextureAsset::Register(L"test_message_box", L"Assets/test_message_box.png");
 	TextureAsset::Register(L"test_choice_box", L"Assets/test_choice_box.png");
 	SoundAsset::Register(L"char", L"Example/Sound.mp3");
+	SoundAsset::Register(L"move", L"Example/Sound.mp3");
+	SoundAsset::Register(L"submit", L"Example/Sound.mp3");
 	FontAsset::Register(L"test_name", 30, L"メイリオ");
 	FontAsset::Register(L"test_text", 30, L"メイリオ");
 

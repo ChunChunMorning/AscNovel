@@ -97,7 +97,13 @@ namespace asc
 			m_isUpdating(false),
 			m_currentLine(0),
 			m_lastSeekPoint(-1),
-			m_messageManager(std::bind(&SoundManager::playCharSound, m_soundManager))
+			m_choiceManager(
+				std::bind(&SoundManager::playMoveSound, m_soundManager),
+				std::bind(&SoundManager::playSubmitSound, m_soundManager)
+			),
+			m_messageManager(
+				std::bind(&SoundManager::playCharSound, m_soundManager)
+			)
 		{
 			m_commands.push_back({ 0, L"1"});
 			m_commands.push_back({ 3, L"1,character1,0,0,640,720" });

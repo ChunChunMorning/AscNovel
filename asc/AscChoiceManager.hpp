@@ -24,11 +24,40 @@ namespace asc
 
 		Array<Choice> m_choices;
 
+		std::function<void()> m_onMove;
+
+		std::function<void()> m_onSubmit;
+
+		int32 select()
+		{
+			// ToDo Configurable
+			const KeyCombination m_up = Input::KeyUp | Gamepad(0).povForward;
+			const KeyCombination m_down = Input::KeyDown | Gamepad(0).povBackward;
+
+			auto selected = m_selected;
+
+			if (m_up.clicked)
+			{
+				selected = Max<int32>(m_selected - 1, 0);
+			}
+			if (m_down.clicked)
+			{
+				selected = Min<int32>(m_selected + 1, m_choices.size() - 1);
+			}
+
+			return selected;
+		}
+
 	public:
 
-		ChoiceManager() :
+		ChoiceManager(
+			std::function<void()> onMove,
+			std::function<void()> onSubmit
+		) :
 			m_isUpdating(false),
-			m_lastSelectedSeekPoint(none) {}
+			m_lastSelectedSeekPoint(none),
+			m_onMove(onMove),
+			m_onSubmit(onSubmit) {}
 
 		virtual ~ChoiceManager() = default;
 
@@ -68,23 +97,21 @@ namespace asc
 				return;
 
 			const KeyCombination m_submit = Input::KeyEnter | Gamepad(0).button(0);
-			const KeyCombination m_up = Input::KeyUp | Gamepad(0).povForward;
-			const KeyCombination m_down = Input::KeyDown | Gamepad(0).povBackward;
 
 			if (m_submit.clicked)
 			{
+				m_onSubmit();
 				m_lastSelectedSeekPoint = m_choices[m_selected].seekPoint;
 				m_isUpdating = false;
 				return;
 			}
 
-			if (m_up.clicked)
+			const auto selected = select();
+
+			if (selected != m_selected)
 			{
-				m_selected = Max<int32>(m_selected - 1, 0);
-			}
-			if (m_down.clicked)
-			{
-				m_selected = Min<int32>(m_selected + 1, m_choices.size() - 1);
+				m_onMove();
+				m_selected = selected;
 			}
 		}
 
