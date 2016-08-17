@@ -73,8 +73,6 @@ namespace asc
 		) :
 			m_isUpdating(false),
 			m_lastSelectedSeekPoint(none),
-			m_unselectedColor(Palette::Black),
-			m_selectedColor(Palette::Red),
 			m_onMove(onMove),
 			m_onSubmit(onSubmit) {}
 
