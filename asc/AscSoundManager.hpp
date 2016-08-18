@@ -6,17 +6,55 @@ namespace asc
 {
 	using namespace s3d;
 
+	using SoundAssetName = String;
+
 	class SoundManager
 	{
 	private:
 
 		Array<std::unique_ptr<BGM>> m_BGMs;
 
+		double m_bgmVolume;
+
+		double m_seVolume;
+
+		SoundAssetName m_charCount;
+
+		SoundAssetName m_move;
+
+		SoundAssetName m_submit;
+
 	public:
 
-		SoundManager() = default;
+		SoundManager() :
+			m_bgmVolume(1.0), m_seVolume(1.0) {};
 
-		virtual ~SoundManager() = default;
+		void setBGMVolume(double volume)
+		{
+			m_bgmVolume = volume;
+
+			for (const auto& bgm : m_BGMs)
+			{
+				bgm->setVolume(m_bgmVolume);
+			}
+		}
+
+		void setSEVolume(double volume)
+		{
+			m_seVolume = volume;
+		}
+
+		void setSE(const SoundAssetName& charCount)
+		{
+			m_charCount = charCount;
+		}
+
+		void setSE(const SoundAssetName& charCount, const SoundAssetName& move, const SoundAssetName& submit)
+		{
+			m_charCount = charCount;
+			m_move = move;
+			m_submit = submit;
+		}
 
 		void update()
 		{
@@ -38,11 +76,12 @@ namespace asc
 		{
 			if (time == 0)
 			{
+				SoundAsset(bgm).setVolume(m_bgmVolume);
 				SoundAsset(bgm).play();
 				return;
 			}
 
-			m_BGMs.push_back(std::make_unique<FadeInBGM>(bgm, time));
+			m_BGMs.push_back(std::make_unique<FadeInBGM>(bgm, m_bgmVolume, time));
 		}
 
 		void stopBGM(const String& string)
@@ -53,46 +92,30 @@ namespace asc
 
 		void stopBGM(const String& bgm, int32 time)
 		{
-			if (time == 0)
-			{
-				SoundAsset(bgm).stop();
-				return;
-			}
+			time == 0 ? SoundAsset(bgm).stop() : m_BGMs.push_back(std::make_unique<FadeOutBGM>(bgm, m_bgmVolume, time));
+		}
 
-			m_BGMs.push_back(std::make_unique<FadeOutBGM>(bgm, time));
+		void playSE(const SoundAssetName& sound)
+		{
+			if (!SoundAsset::IsRegistered(sound))
+				return;
+
+			SoundAsset(sound).playMulti(m_seVolume);
 		}
 
 		void playCharSound()
 		{
-			// ToDo Configurable
-			const String charSound = L"char";
-
-			if (SoundAsset::IsRegistered(charSound))
-			{
-				SoundAsset(charSound).playMulti();
-			}
+			playSE(m_charCount);
 		}
 
 		void playMoveSound()
 		{
-			// ToDo Configurable
-			const String moveSound = L"move";
-
-			if (SoundAsset::IsRegistered(moveSound))
-			{
-				SoundAsset(moveSound).playMulti();
-			}
+			playSE(m_move);
 		}
 
 		void playSubmitSound()
 		{
-			// ToDo Configurable
-			const String submitSound = L"submit";
-
-			if (SoundAsset::IsRegistered(submitSound))
-			{
-				SoundAsset(submitSound).playMulti();
-			}
+			playSE(m_submit);
 		}
 
 	};

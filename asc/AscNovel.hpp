@@ -300,13 +300,6 @@ namespace asc
 			return *this;
 		}
 
-		Novel& setChoiceTexture(const TextureAssetName texture, const Rect& region)
-		{
-			m_choiceManager.setTexture(texture, region);
-
-			return *this;
-		}
-
 		Novel& setMessagePosition(const Point& text, const Point& name = Point::Zero)
 		{
 			m_messageManager.setPosition(text, name);
@@ -314,9 +307,44 @@ namespace asc
 			return *this;
 		}
 
+		Novel& setChoiceTexture(const TextureAssetName texture, const Rect& region)
+		{
+			m_choiceManager.setTexture(texture, region);
+
+			return *this;
+		}
+
 		Novel& setChoicePosition(const Point& position)
 		{
 			m_choiceManager.setPosition(position);
+
+			return *this;
+		}
+
+		Novel& setBGMVolume(double volume)
+		{
+			m_soundManager.setBGMVolume(volume);
+
+			return *this;
+		}
+
+		Novel& setSEVolume(double volume)
+		{
+			m_soundManager.setSEVolume(volume);
+
+			return *this;
+		}
+
+		Novel& setSound(const SoundAssetName& charCount)
+		{
+			m_soundManager.setSE(charCount);
+
+			return *this;
+		}
+
+		Novel& setSound(const SoundAssetName& charCount, const SoundAssetName& move, const SoundAssetName& submit)
+		{
+			m_soundManager.setSE(charCount, move, submit);
 
 			return *this;
 		}

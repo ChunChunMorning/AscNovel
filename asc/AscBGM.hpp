@@ -11,6 +11,8 @@ namespace asc
 
 		String m_bgm;
 
+		double m_volume;
+
 		double m_time;
 
 		Stopwatch m_stopwatch;
@@ -19,13 +21,18 @@ namespace asc
 
 		BGM() = default;
 
-		BGM(const String& bgm, int32 time) :
-			m_bgm(bgm), m_time(time)
+		BGM(const String& bgm, double volume, int32 time) :
+			m_bgm(bgm), m_volume(volume), m_time(time)
 		{
 			m_stopwatch.start();
 		}
 
 		virtual ~BGM() = default;
+
+		void setVolume(double volume)
+		{
+			m_volume = volume;
+		}
 
 		virtual void update() const {};
 
@@ -41,8 +48,8 @@ namespace asc
 
 		FadeInBGM() = default;
 
-		FadeInBGM(const String& bgm, int32 time) :
-			BGM(bgm, time)
+		FadeInBGM(const String& bgm, double volume, int32 time) :
+			BGM(bgm, volume, time)
 		{
 			SoundAsset(m_bgm).play();
 		}
@@ -51,7 +58,7 @@ namespace asc
 
 		virtual void update() const override
 		{
-			SoundAsset(m_bgm).setVolume(m_stopwatch.ms() / static_cast<double>(m_time));
+			SoundAsset(m_bgm).setVolume(m_volume * m_stopwatch.ms() / static_cast<double>(m_time));
 		}
 
 	};
@@ -62,8 +69,8 @@ namespace asc
 
 		FadeOutBGM() = default;
 
-		FadeOutBGM(const String& bgm, int32 time) :
-			BGM(bgm, time) {}
+		FadeOutBGM(const String& bgm, double volume, int32 time) :
+			BGM(bgm, volume, time) {}
 
 		virtual ~FadeOutBGM()
 		{
@@ -72,7 +79,7 @@ namespace asc
 
 		virtual void update() const override
 		{
-			SoundAsset(m_bgm).setVolume(1.0 - m_stopwatch.ms() / static_cast<double>(m_time));
+			SoundAsset(m_bgm).setVolume(m_volume * (1.0 - m_stopwatch.ms() / static_cast<double>(m_time)));
 		}
 
 	};
