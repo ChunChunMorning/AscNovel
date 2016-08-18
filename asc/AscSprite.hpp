@@ -65,8 +65,6 @@ namespace asc
 
 		FixedSprite(const String& string) : Sprite(string) {}
 
-		virtual ~FixedSprite() = default;
-
 		virtual void draw() const override
 		{
 			m_region(TextureAsset(m_texture)).draw();
