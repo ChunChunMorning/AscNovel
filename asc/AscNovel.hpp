@@ -157,11 +157,11 @@ namespace asc
 			m_commands.push_back({ 1, L"Jump 2" });
 			m_commands.push_back({ 6, L"2" });
 			m_commands.push_back({ 0, L"5" });
-			m_commands.push_back({ 8, L"bgm1,3000" });
+			m_commands.push_back({ 8, L"bgm1,3" });
 			m_commands.push_back({ 1, L"Play BGM1" });
 			m_commands.push_back({ 0, L"6" });
-			m_commands.push_back({ 9, L"bgm1,3000" });
-			m_commands.push_back({ 8, L"bgm2,3000" });
+			m_commands.push_back({ 9, L"bgm1,3" });
+			m_commands.push_back({ 8, L"bgm2,3" });
 			m_commands.push_back({ 1, L"Play BGM2" });
 			m_commands.push_back({ 9, L"bgm2,0" });
 			m_commands.push_back({ 1, L"Stop BGM2" });
@@ -228,7 +228,6 @@ namespace asc
 
 			m_messageManager.update();
 			m_choiceManager.update();
-			m_soundManager.update();
 		}
 
 		bool isUpdating() const

@@ -1,6 +1,5 @@
 # pragma once
 # include <Siv3D.hpp>
-# include "AscBGM.hpp"
 
 namespace asc
 {
@@ -11,8 +10,6 @@ namespace asc
 	class SoundManager
 	{
 	private:
-
-		Array<std::unique_ptr<BGM>> m_BGMs;
 
 		double m_bgmVolume;
 
@@ -32,11 +29,6 @@ namespace asc
 		void setBGMVolume(double volume)
 		{
 			m_bgmVolume = volume;
-
-			for (const auto& bgm : m_BGMs)
-			{
-				bgm->setVolume(m_bgmVolume);
-			}
 		}
 
 		void setSEVolume(double volume)
@@ -56,43 +48,27 @@ namespace asc
 			m_submit = submit;
 		}
 
-		void update()
-		{
-			for (const auto& bgm : m_BGMs)
-			{
-				bgm->update();
-			}
-
-			Erase_if(m_BGMs, [](const std::unique_ptr<BGM>& bgm){ return bgm->isFinished(); });
-		}
-
 		void playBGM(const String& string)
 		{
 			const auto args = string.split(L',');
-			playBGM(args[0], Parse<int32>(args[1]));
+			playBGM(args[0], Parse<double>(args[1]));
 		}
 
-		void playBGM(const String& bgm, int32 time)
+		void playBGM(const String& bgm, double time)
 		{
-			if (time == 0)
-			{
-				SoundAsset(bgm).setVolume(m_bgmVolume);
-				SoundAsset(bgm).play();
-				return;
-			}
-
-			m_BGMs.push_back(std::make_unique<FadeInBGM>(bgm, m_bgmVolume, time));
+			SoundAsset(bgm).setVolume(m_bgmVolume);
+			SoundAsset(bgm).play(static_cast<SecondsF>(time));
 		}
 
 		void stopBGM(const String& string)
 		{
 			const auto args = string.split(L',');
-			stopBGM(args[0], Parse<int32>(args[1]));
+			stopBGM(args[0], Parse<double>(args[1]));
 		}
 
-		void stopBGM(const String& bgm, int32 time)
+		void stopBGM(const String& bgm, double time)
 		{
-			time == 0 ? SoundAsset(bgm).stop() : m_BGMs.push_back(std::make_unique<FadeOutBGM>(bgm, m_bgmVolume, time));
+			SoundAsset(bgm).stop(static_cast<SecondsF>(time));
 		}
 
 		void playSE(const SoundAssetName& sound)
