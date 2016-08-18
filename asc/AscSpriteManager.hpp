@@ -14,10 +14,6 @@ namespace asc
 
 	public:
 
-		SpriteManager() = default;
-
-		virtual ~SpriteManager() = default;
-
 		template <class Type>
 		void add(const String& string)
 		{
