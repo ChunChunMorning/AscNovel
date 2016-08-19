@@ -202,6 +202,12 @@ namespace asc
 			m_stopwatch.reset();
 		}
 
+		void skip()
+		{
+			m_stopwatch.reset();
+			m_charCount = m_text.length;
+		}
+
 		bool isUpdating() const
 		{
 			return m_stopwatch.isActive();

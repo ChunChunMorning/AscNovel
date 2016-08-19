@@ -133,6 +133,19 @@ namespace asc
 			m_currentLine++;
 		}
 
+		void skip()
+		{
+			clearManager();
+
+			while (m_isUpdating && !m_choiceManager.isUpdating())
+			{
+				execute();
+			}
+
+			m_timeManager.clear();
+			m_messageManager.skip();
+		}
+
 	public:
 
 		Novel() :
@@ -218,6 +231,11 @@ namespace asc
 
 		void update()
 		{
+			if (m_skip.clicked && !m_choiceManager.isUpdating())
+			{
+				skip();
+			}
+
 			while (
 				m_isUpdating &&
 				!m_messageManager.isUpdating() &&
