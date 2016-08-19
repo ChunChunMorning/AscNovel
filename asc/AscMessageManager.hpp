@@ -63,7 +63,14 @@ namespace asc
 
 		Point m_namePosition;
 
+		Array<wchar> m_silentChars;
+
 		std::function<void()> m_onCountChar;
+
+		bool isSilentChar(wchar character) const
+		{
+			return std::find(m_silentChars.begin(), m_silentChars.end(), character) != m_silentChars.end();
+		}
 
 	public:
 
@@ -72,6 +79,7 @@ namespace asc
 			m_charCount(0U),
 			m_speed(100),
 			m_time(100),
+			m_silentChars({ L' ', L'Å@' }),
 			m_onCountChar(onCountChar) {}
 
 		void setName(const String& name)
@@ -178,7 +186,7 @@ namespace asc
 			{
 				m_charCount = charCount;
 
-				if (m_text[charCount - 1] != L' ')
+				if (!isSilentChar(m_text[charCount - 1]))
 				{
 					m_onCountChar();
 				}
