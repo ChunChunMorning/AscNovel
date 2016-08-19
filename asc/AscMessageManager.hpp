@@ -178,7 +178,7 @@ namespace asc
 			
 			if (m_stopwatch.ms() < typingTime && m_submit.clicked)
 			{
-				m_stopwatch.set(static_cast<Milliseconds>(m_text.length * m_speed));
+				m_stopwatch.set(static_cast<Milliseconds>(typingTime));
 
 				return;
 			}
