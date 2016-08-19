@@ -1,5 +1,6 @@
 # pragma once
 # include <Siv3D.hpp>
+# include "AscIMessgeButton.hpp"
 
 namespace asc
 {
@@ -8,9 +9,25 @@ namespace asc
 	using TextureAssetName = String;
 	using FontAssetName = String;
 
+	class DefaultButton : public IMessageButton
+	{
+	public:
+
+		void init() override {}
+
+		void update() override {}
+
+		void onClick() override {}
+
+		void draw() const override {}
+
+	};
+
 	class MessageManager
 	{
 	private:
+
+		std::unique_ptr<IMessageButton> m_button;
 
 		bool m_isAutomatic;
 
@@ -49,6 +66,7 @@ namespace asc
 	public:
 
 		MessageManager(std::function<void()> onCountChar) :
+			m_button(std::make_unique<DefaultButton>()),
 			m_charCount(0U),
 			m_speed(100),
 			m_time(100),
