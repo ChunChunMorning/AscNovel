@@ -161,10 +161,15 @@ namespace asc
 					m_stopwatch.reset();
 					m_button->onClick();
 				}
+
+				return;
 			}
-			else if(m_stopwatch.ms() < typingTime && (m_submit.clicked || m_skip.pressed))
+			
+			if (m_stopwatch.ms() < typingTime && (m_submit.clicked || m_skip.pressed))
 			{
 				m_stopwatch.set(static_cast<Milliseconds>(m_text.length * m_speed));
+
+				return;
 			}
 
 			const auto charCount = Min<uint32>(m_stopwatch.ms() / m_speed, m_text.length);
