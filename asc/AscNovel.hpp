@@ -135,8 +135,6 @@ namespace asc
 
 		void skip()
 		{
-			clearManager();
-
 			while (m_isUpdating && !m_choiceManager.isUpdating())
 			{
 				execute();
