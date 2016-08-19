@@ -160,7 +160,8 @@ namespace asc
 					m_stopwatch.reset();
 					return;
 				}
-				else if(!m_callOnShonwAll)
+				
+				if(!m_callOnShonwAll)
 				{
 					m_button->onShownAll();
 					m_callOnShonwAll = true;
