@@ -131,6 +131,11 @@ namespace asc
 			m_namePosition = name;
 		}
 
+		void setSilentChars(const Array<wchar> silentChars)
+		{
+			m_silentChars = silentChars;
+		}
+
 		void setButton(std::unique_ptr<IMessageButton> button)
 		{
 			m_button.swap(button);

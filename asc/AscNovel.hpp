@@ -356,5 +356,12 @@ namespace asc
 			return *this;
 		}
 
+		Novel& setSilentChars(const Array<wchar> silentChars)
+		{
+			m_messageManager.setSilentChars(silentChars);
+
+			return *this;
+		}
+
 	};
 }
