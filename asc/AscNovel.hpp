@@ -23,6 +23,8 @@ namespace asc
 
 		int32 m_lastSeekPoint;
 
+		KeyCombination m_skip;
+
 		Array<Commnad> m_commands;
 
 		ChoiceManager m_choiceManager;
@@ -264,15 +266,17 @@ namespace asc
 
 		Novel& setKey(const KeyCombination& submit, const KeyCombination& skip)
 		{
-			m_messageManager.setKey(submit, skip);
+			m_messageManager.setKey(submit);
+			m_skip = skip;
 
 			return *this;
 		}
 
 		Novel& setKey(const KeyCombination& submit, const KeyCombination& skip, const KeyCombination& up, const KeyCombination& down)
 		{
-			m_messageManager.setKey(submit, skip);
+			m_messageManager.setKey(submit);
 			m_choiceManager.setKey(submit, up, down);
+			m_skip = skip;
 
 			return *this;
 		}

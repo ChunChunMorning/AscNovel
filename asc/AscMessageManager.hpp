@@ -43,8 +43,6 @@ namespace asc
 
 		KeyCombination m_submit;
 
-		KeyCombination m_skip;
-
 		int32 m_speed;
 		
 		int32 m_time;
@@ -92,10 +90,9 @@ namespace asc
 			m_text = text;
 		}
 
-		void setKey(const KeyCombination& submit, const KeyCombination& skip)
+		void setKey(const KeyCombination& submit)
 		{
 			m_submit = submit;
-			m_skip = skip;
 		}
 
 		void setSpeed(int32 speed)
@@ -169,7 +166,7 @@ namespace asc
 					m_callOnShonwAll = true;
 				}
 
-				if (m_submit.clicked || m_skip.pressed)
+				if (m_submit.clicked || m_submit.pressed)
 				{
 					m_stopwatch.reset();
 					m_button->onClick();
@@ -178,7 +175,7 @@ namespace asc
 				return;
 			}
 			
-			if (m_stopwatch.ms() < typingTime && (m_submit.clicked || m_skip.pressed))
+			if (m_stopwatch.ms() < typingTime && m_submit.clicked)
 			{
 				m_stopwatch.set(static_cast<Milliseconds>(m_text.length * m_speed));
 
