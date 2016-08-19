@@ -125,6 +125,11 @@ namespace asc
 			m_namePosition = name;
 		}
 
+		void setButton(std::unique_ptr<IMessageButton> button)
+		{
+			m_button.swap(button);
+		}
+		
 		void start(bool isAutomatic = false)
 		{
 			m_stopwatch.restart();

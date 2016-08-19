@@ -2,6 +2,7 @@
 # include <Siv3D.hpp>
 # include "AscChoiceManager.hpp"
 # include "AscMessageManager.hpp"
+# include "AscIMessgeButton.hpp"
 # include "AscSoundManager.hpp"
 # include "AscSpriteManager.hpp"
 # include "AscTimeManager.hpp"
@@ -280,6 +281,13 @@ namespace asc
 		{
 			m_messageManager.setFont(text, name);
 			m_choiceManager.setFont(text);
+
+			return *this;
+		}
+
+		Novel& setButton(std::unique_ptr<IMessageButton> button)
+		{
+			m_messageManager.setButton(std::move(button));
 
 			return *this;
 		}

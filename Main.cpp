@@ -1,6 +1,34 @@
 ﻿# include <Siv3D.hpp>
 # include "asc\AscNovel.hpp"
 
+class Button : public asc::IMessageButton
+{
+private:
+
+	Stopwatch m_stopwatch;
+
+public:
+
+	void init() override
+	{
+		m_stopwatch.start();
+	}
+
+	void update() override {}
+
+	void onClick() override
+	{
+		m_stopwatch.reset();
+	}
+
+	void draw() const override
+	{
+		const double r = Min<double>(10.0, m_stopwatch.ms() / 100);
+
+		Circle(100, 100, r).draw();
+	}
+};
+
 void Main()
 {
 	Window::Resize(1280, 720);
@@ -27,6 +55,7 @@ void Main()
 		.setChoiceTexture(L"choice", Rect(850, 330, 400, 160))
 		.setChoicePosition({870, 340})
 		.setSound(L"char", L"move", L"submit")
+		.setButton(std::make_unique<Button>())
 		.setKey(KeyCombination(Input::KeyEnter), KeyCombination(Input::KeySpace), KeyCombination(Input::KeyUp), KeyCombination(Input::KeyDown));
 
 	while (System::Update())
