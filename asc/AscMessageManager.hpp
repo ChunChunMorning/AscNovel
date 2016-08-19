@@ -15,7 +15,7 @@ namespace asc
 
 		void onShownAll() override {}
 
-		void onClick() override {}
+		void onSubmit() override {}
 
 		void update() override {}
 
@@ -170,7 +170,7 @@ namespace asc
 				if (m_submit.clicked || m_submit.pressed)
 				{
 					m_stopwatch.reset();
-					m_button->onClick();
+					m_button->onSubmit();
 				}
 
 				return;

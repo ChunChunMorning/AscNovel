@@ -14,7 +14,7 @@ public:
 		m_stopwatch.start();
 	}
 
-	void onClick() override
+	void onSubmit() override
 	{
 		m_stopwatch.reset();
 	}
