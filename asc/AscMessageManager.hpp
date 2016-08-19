@@ -13,11 +13,11 @@ namespace asc
 	{
 	public:
 
-		void init() override {}
-
-		void update() override {}
+		void onShownAll() override {}
 
 		void onClick() override {}
+
+		void update() override {}
 
 		void draw() const override {}
 
@@ -30,6 +30,8 @@ namespace asc
 		std::unique_ptr<IMessageButton> m_button;
 
 		bool m_isAutomatic;
+
+		bool m_callOnShonwAll;
 
 		Stopwatch m_stopwatch;
 
@@ -131,6 +133,7 @@ namespace asc
 			m_stopwatch.start();
 			m_charCount = 0U;
 			m_isAutomatic = isAutomatic;
+			m_callOnShonwAll = false;
 		}
 
 		void update()
@@ -140,14 +143,26 @@ namespace asc
 
 			const auto typingTime = static_cast<int32>(m_text.length) * m_speed;
 
-			if (m_stopwatch.ms() >= typingTime)
+			if (m_stopwatch.ms() >= typingTime + m_time)
 			{
-				if (m_stopwatch.ms() >= typingTime + m_time && (m_submit.clicked || m_skip.pressed || m_isAutomatic))
+				if (m_isAutomatic)
 				{
 					m_stopwatch.reset();
+					return;
+				}
+				else if(!m_callOnShonwAll)
+				{
+					m_button->onShownAll();
+					m_callOnShonwAll = true;
+				}
+
+				if (m_submit.clicked || m_skip.pressed)
+				{
+					m_stopwatch.reset();
+					m_button->onClick();
 				}
 			}
-			else if(m_submit.clicked || m_skip.pressed)
+			else if(m_stopwatch.ms() < typingTime && (m_submit.clicked || m_skip.pressed))
 			{
 				m_stopwatch.set(static_cast<Milliseconds>(m_text.length * m_speed));
 			}
@@ -180,9 +195,9 @@ namespace asc
 		void draw() const
 		{
 			m_region(TextureAsset(m_texture)).draw();
-
 			FontAsset(m_nameFont).draw(m_name, m_namePosition, m_color);
 			FontAsset(m_textFont).draw(m_text.substr(0U, m_charCount), m_textPosition, m_color);
+			m_button->draw();
 		}
 
 	};

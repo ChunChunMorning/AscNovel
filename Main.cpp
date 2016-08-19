@@ -9,20 +9,23 @@ private:
 
 public:
 
-	void init() override
+	void onShownAll() override
 	{
 		m_stopwatch.start();
 	}
-
-	void update() override {}
 
 	void onClick() override
 	{
 		m_stopwatch.reset();
 	}
 
+	void update() override {}
+
 	void draw() const override
 	{
+		if(!m_stopwatch.isActive())
+			return;
+
 		const double r = Min<double>(10.0, m_stopwatch.ms() / 100);
 
 		Circle(100, 100, r).draw();

@@ -8,11 +8,11 @@ namespace asc
 
 		virtual ~IMessageButton() = default;
 
-		virtual void init() = 0;
-
-		virtual void update() = 0;
+		virtual void onShownAll() = 0;
 
 		virtual void onClick() = 0;
+
+		virtual void update() = 0;
 
 		virtual void draw() const = 0;
 
