@@ -277,17 +277,17 @@ namespace asc
 			return *this;
 		}
 
-		Novel& setFont(const FontAssetName& text, const FontAssetName& name = L"")
+		Novel& setButton(std::unique_ptr<IMessageButton>&& button)
 		{
-			m_messageManager.setFont(text, name);
-			m_choiceManager.setFont(text);
+			m_messageManager.setButton(std::move(button));
 
 			return *this;
 		}
 
-		Novel& setButton(std::unique_ptr<IMessageButton> button)
+		Novel& setFont(const FontAssetName& text, const FontAssetName& name = L"")
 		{
-			m_messageManager.setButton(std::move(button));
+			m_messageManager.setFont(text, name);
+			m_choiceManager.setFont(text);
 
 			return *this;
 		}

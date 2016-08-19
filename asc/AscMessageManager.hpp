@@ -140,7 +140,7 @@ namespace asc
 		{
 			m_button.swap(button);
 		}
-		
+
 		void start(bool isAutomatic = false)
 		{
 			m_stopwatch.start();
