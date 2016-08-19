@@ -189,7 +189,7 @@ namespace asc
 		{
 			m_name.clear();
 			m_text.clear();
-			m_stopwatch.pause();
+			m_stopwatch.reset();
 		}
 
 		bool isUpdating() const
