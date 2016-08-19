@@ -70,11 +70,7 @@ namespace asc
 			m_charCount(0U),
 			m_speed(100),
 			m_time(100),
-			m_onCountChar(onCountChar)
-		{
-			m_stopwatch.start();
-			m_stopwatch.pause();
-		}
+			m_onCountChar(onCountChar) {}
 
 		void setName(const String& name)
 		{
@@ -132,14 +128,14 @@ namespace asc
 		
 		void start(bool isAutomatic = false)
 		{
-			m_stopwatch.restart();
+			m_stopwatch.start();
 			m_charCount = 0U;
 			m_isAutomatic = isAutomatic;
 		}
 
 		void update()
 		{
-			if(m_stopwatch.isPaused())
+			if(!isUpdating())
 				return;
 
 			const auto typingTime = static_cast<int32>(m_text.length) * m_speed;
@@ -148,7 +144,7 @@ namespace asc
 			{
 				if (m_stopwatch.ms() >= typingTime + m_time && (m_submit.clicked || m_skip.pressed || m_isAutomatic))
 				{
-					m_stopwatch.pause();
+					m_stopwatch.reset();
 				}
 			}
 			else if(m_submit.clicked || m_skip.pressed)
@@ -178,7 +174,7 @@ namespace asc
 
 		bool isUpdating() const
 		{
-			return !m_stopwatch.isPaused();
+			return m_stopwatch.isActive();
 		}
 
 		void draw() const
