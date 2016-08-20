@@ -79,7 +79,7 @@ namespace asc
 			m_charCount(0U),
 			m_speed(100),
 			m_time(100),
-			m_silentChars({ L' ', L'Å@' }),
+			m_silentChars({ L' ', L'Å@', L'\n' }),
 			m_onCountChar(onCountChar) {}
 
 		void setName(const String& name)
