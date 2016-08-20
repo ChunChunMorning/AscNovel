@@ -133,22 +133,22 @@ namespace asc
 
 			// Lihgt
 			case 10:
-				spriteManager.lightUp(commands[currentLine][1]);
+				spriteManager.lightUp(Parse<int32>(commands[currentLine][1]), commands[currentLine].size() > 2);
 				break;
 
 			// Spot
 			case 11:
-				spriteManager.lightUpSpot(commands[currentLine][1]);
+				spriteManager.lightUpSpot(Parse<int32>(commands[currentLine][1]));
 				break;
 
 			// Bring
 			case 12:
-				spriteManager.bring(commands[currentLine][1]);
+				spriteManager.bring(Parse<int32>(commands[currentLine][1]));
 				break;
 
 			// Erase
 			case 13:
-				spriteManager.erase(commands[currentLine][1]);
+				spriteManager.erase(Parse<int32>(commands[currentLine][1]));
 				break;
 
 			// Wait

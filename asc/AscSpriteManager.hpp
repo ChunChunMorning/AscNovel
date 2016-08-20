@@ -20,12 +20,6 @@ namespace asc
 			m_sprites.push_back(std::make_unique<Type>(id, texture, x, y, w, h));
 		}
 
-		void lightUp(const String& string)
-		{
-			const auto args = string.split(L',');
-			lightUp(Parse<int32>(args[0]), Parse<bool>(args[1]));
-		}
-
 		void lightUp(int32 id, bool light)
 		{
 			for (const auto& sprite : m_sprites)
@@ -38,22 +32,12 @@ namespace asc
 			}
 		}
 
-		void lightUpSpot(const String& string)
-		{
-			lightUpSpot(Parse<int32>(string));
-		}
-
 		void lightUpSpot(int32 id)
 		{
 			for (const auto& sprite : m_sprites)
 			{
 				sprite->lightUp(sprite->getID() == id);
 			}
-		}
-
-		void bring(const String& string)
-		{
-			bring(Parse<int32>(string));
 		}
 
 		void bring(int32 id)
@@ -70,11 +54,6 @@ namespace asc
 				return true;
 			}
 			);
-		}
-
-		void erase(const String& string)
-		{
-			erase(Parse<int32>(string));
 		}
 
 		void erase(int32 id)
