@@ -96,15 +96,15 @@ namespace asc
 		{
 			m_submit = submit;
 		}
-
-		void setSpeed(int32 speed)
+		
+		void setSpeed(double charPerSecond)
 		{
-			m_speed = speed;
+			m_speed = static_cast<int32>(charPerSecond * 1000);
 		}
 
-		void setTime(int32 time)
+		void setTime(double second)
 		{
-			m_time = time;
+			m_speed = static_cast<int32>(second * 1000);
 		}
 
 		void setTexture(const TextureAssetName& texture, const Rect& region)

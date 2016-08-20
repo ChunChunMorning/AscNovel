@@ -38,9 +38,9 @@ namespace asc
 
 		void draw() const;
 
-		Novel& setSpeed(int32 speed);
+		Novel& setSpeed(double charPerSecond);
 
-		Novel& setWaitingTime(int32 time);
+		Novel& setWaitingTime(double second);
 
 		Novel& setKey(const KeyCombination& submit, const KeyCombination& skip);
 

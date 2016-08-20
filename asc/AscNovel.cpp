@@ -302,16 +302,16 @@ void asc::Novel::draw() const
 	pImpl->choiceManager.draw();
 }
 
-asc::Novel& asc::Novel::setSpeed(int32 speed)
+asc::Novel& asc::Novel::setSpeed(double charPerSecond)
 {
-	pImpl->messageManager.setSpeed(speed);
+	pImpl->messageManager.setSpeed(charPerSecond);
 
 	return *this;
 }
 
-asc::Novel& asc::Novel::setWaitingTime(int32 time)
+asc::Novel& asc::Novel::setWaitingTime(double second)
 {
-	pImpl->messageManager.setTime(time);
+	pImpl->messageManager.setTime(second);
 
 	return *this;
 }
