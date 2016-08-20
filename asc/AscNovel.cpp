@@ -106,8 +106,17 @@ namespace asc
 
 			// Choice
 			case 5:
-				choiceManager.start(commands[currentLine][1]);
+			{
+				Array<std::pair<int32, String>> choices;
+
+				for (auto i = 1U; i < commands[currentLine].size(); i += 2)
+				{
+					choices.push_back(std::make_pair(Parse<int32>(commands[currentLine][i]), commands[currentLine][i + 1]));
+				}
+
+				choiceManager.start(choices);
 				break;
+			}
 
 			// Jump
 			case 6:

@@ -105,19 +105,6 @@ namespace asc
 			m_position = position;
 		}
 
-		void start(String string)
-		{
-			const auto args = string.split(L',');
-			Array<std::pair<int32, String>> choices;
-
-			for (auto i = 0u; i < args.size(); i += 2)
-			{
-				choices.push_back(std::make_pair(Parse<int32>(args[i]), args[i + 1]));
-			}
-
-			start(choices);
-		}
-
 		void start(const Array<std::pair<int32, String>>& choices)
 		{
 			Point position = m_position;
