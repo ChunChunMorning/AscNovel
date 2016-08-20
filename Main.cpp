@@ -66,8 +66,7 @@ void Main()
 		.setButton(Button())
 		.setKey(KeyCombination(Input::KeyEnter), KeyCombination(Input::KeySpace), KeyCombination(Input::KeyUp), KeyCombination(Input::KeyDown));
 
-	TextReader reader(L"Assets/test.txt");
-	novel.loadByString(reader.readAll());
+	novel.load(L"Assets/test.txt");
 
 	while (System::Update())
 	{

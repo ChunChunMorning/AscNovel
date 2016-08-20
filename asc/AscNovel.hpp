@@ -160,6 +160,17 @@ namespace asc
 
 		virtual ~Novel() = default;
 
+		bool load(const FilePath& path, const Optional<TextEncoding>& encoding = unspecified)
+		{
+			TextReader reader(path, encoding);
+
+			if (!reader.isOpened())
+				return false;
+
+			loadByString(reader.readAll());
+			return true;
+		}
+
 		void loadByString(const String& scenario)
 		{
 			const auto lines = scenario.trim().split(L'\n');
