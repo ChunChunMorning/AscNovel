@@ -133,7 +133,7 @@ namespace asc
 			m_silentChars = silentChars;
 		}
 
-		void setButton(std::unique_ptr<IMessageButton> button)
+		void setButton(std::unique_ptr<IMessageButton>&& button)
 		{
 			m_button.swap(button);
 		}

@@ -304,6 +304,12 @@ namespace asc
 			return *this;
 		}
 
+		template <class Type>
+		Novel& setButton(const Type& button)
+		{
+			return setButton(static_cast<std::unique_ptr<IMessageButton>>(std::make_unique<Type>(button)));
+		}
+
 		Novel& setFont(const FontAssetName& text, const FontAssetName& name = L"")
 		{
 			m_messageManager.setFont(text, name);

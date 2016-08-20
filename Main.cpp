@@ -58,7 +58,7 @@ void Main()
 		.setChoiceTexture(L"choice", Rect(850, 330, 400, 160))
 		.setChoicePosition({870, 340})
 		.setSound(L"char", L"move", L"submit")
-		.setButton(std::make_unique<Button>())
+		.setButton(Button())
 		.setKey(KeyCombination(Input::KeyEnter), KeyCombination(Input::KeySpace), KeyCombination(Input::KeyUp), KeyCombination(Input::KeyDown));
 
 	while (System::Update())
