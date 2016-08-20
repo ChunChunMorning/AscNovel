@@ -11,11 +11,13 @@ namespace asc
 {
 	using namespace s3d;
 
+	using Commnad = std::pair<int32, String>;
+
+	const Commnad EndOfCommand = std::pair<int32, String>(0, L"-1");
+
 	class Novel
 	{
 	private:
-
-		using Commnad = std::pair<int32, String>;
 
 		bool m_isUpdating;
 
@@ -150,6 +152,7 @@ namespace asc
 			m_isUpdating(false),
 			m_currentLine(0),
 			m_lastSeekPoint(-1),
+			m_commands({ EndOfCommand }),
 			m_choiceManager(
 				[&] { m_soundManager.playMoveSound(); },
 				[&] { m_soundManager.playSubmitSound(); }
@@ -160,28 +163,30 @@ namespace asc
 
 		virtual ~Novel() = default;
 
-		bool load(const FilePath& path, const Optional<TextEncoding>& encoding = unspecified)
+		bool load(const FilePath& path, const Optional<TextEncoding>& encoding = unspecified, bool isAdditive = false)
 		{
 			TextReader reader(path, encoding);
 
 			if (!reader.isOpened())
 				return false;
 
-			loadByString(reader.readAll());
+			loadByString(reader.readAll(), isAdditive);
 			return true;
 		}
 
-		void loadByString(const String& scenario)
+		void loadByString(const String& scenario, bool isAdditive = false)
 		{
+			isAdditive ? m_commands.pop_back() : m_commands.clear();
+
 			const auto lines = scenario.trim().split(L'\n');
 
 			for (const auto& line : lines)
 			{
 				const auto pos = line.indexOf(L",");
-				m_commands.push_back(std::make_pair(Parse<int32>(line.substr(0U, pos)), line.substr(pos + 1, line.length)));
+				m_commands.push_back(std::make_pair(Parse<int32>(line.substr(0U, pos)), line.substr(pos + 1U, line.length)));
 			}
 
-			m_commands.push_back(std::make_pair(0, L"-1"));
+			m_commands.push_back(EndOfCommand);
 		}
 
 		bool start(int32 seekPoint)
