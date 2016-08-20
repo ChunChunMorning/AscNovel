@@ -69,11 +69,9 @@ namespace asc
 
 			// Text
 			case 1:
-			{
 				messageManager.setText(commands[currentLine][1]);
 				messageManager.start(commands[currentLine].size() > 2);
 				break;
-			}
 
 			// Name
 			case 2:
@@ -125,12 +123,12 @@ namespace asc
 
 			// Play
 			case 8:
-				soundManager.playBGM(commands[currentLine][1]);
+				soundManager.playBGM(commands[currentLine][1], Parse<double>(commands[currentLine][2]));
 				break;
 
 			// Stop
 			case 9:
-				soundManager.stopBGM(commands[currentLine][1]);
+				soundManager.stopBGM(commands[currentLine][1], Parse<double>(commands[currentLine][2]));
 				break;
 
 			// Lihgt

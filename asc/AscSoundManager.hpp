@@ -48,22 +48,10 @@ namespace asc
 			m_submit = submit;
 		}
 
-		void playBGM(const String& string)
-		{
-			const auto args = string.split(L',');
-			playBGM(args[0], Parse<double>(args[1]));
-		}
-
 		void playBGM(const String& bgm, double time)
 		{
 			SoundAsset(bgm).setVolume(m_bgmVolume);
 			SoundAsset(bgm).play(static_cast<SecondsF>(time));
-		}
-
-		void stopBGM(const String& string)
-		{
-			const auto args = string.split(L',');
-			stopBGM(args[0], Parse<double>(args[1]));
 		}
 
 		void stopBGM(const String& bgm, double time)
