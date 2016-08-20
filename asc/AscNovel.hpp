@@ -229,7 +229,7 @@ namespace asc
 
 		void update()
 		{
-			if (m_skip.clicked && !m_choiceManager.isUpdating())
+			if (m_skip.clicked)
 			{
 				skip();
 			}
