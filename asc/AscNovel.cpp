@@ -102,8 +102,28 @@ namespace asc
 					);
 				break;
 
-			// Choice
+			// Bring
 			case 5:
+				spriteManager.bring(Parse<int32>(commands[currentLine][1]));
+				break;
+
+			// Lihgt
+			case 6:
+				spriteManager.lightUp(Parse<int32>(commands[currentLine][1]), commands[currentLine].size() < 3);
+				break;
+
+			// Spot
+			case 7:
+				spriteManager.lightUpSpot(Parse<int32>(commands[currentLine][1]));
+				break;
+
+			// Erase
+			case 8:
+				spriteManager.erase(Parse<int32>(commands[currentLine][1]));
+				break;
+
+			// Choice
+			case 9:
 			{
 				Array<std::pair<int32, String>> choices;
 
@@ -116,44 +136,54 @@ namespace asc
 				break;
 			}
 
-			// Jump
-			case 6:
-				start(Parse<int32>(commands[currentLine][1]));
-				return;
-
 			// Play
-			case 8:
+			case 10:
 				soundManager.playBGM(commands[currentLine][1], Parse<double>(commands[currentLine][2]));
 				break;
 
 			// Stop
-			case 9:
+			case 11:
 				soundManager.stopBGM(commands[currentLine][1], Parse<double>(commands[currentLine][2]));
 				break;
 
-			// Lihgt
-			case 10:
-				spriteManager.lightUp(Parse<int32>(commands[currentLine][1]), commands[currentLine].size() < 3);
-				break;
-
-			// Spot
-			case 11:
-				spriteManager.lightUpSpot(Parse<int32>(commands[currentLine][1]));
-				break;
-
-			// Bring
+			// Jump
 			case 12:
-				spriteManager.bring(Parse<int32>(commands[currentLine][1]));
-				break;
-
-			// Erase
-			case 13:
-				spriteManager.erase(Parse<int32>(commands[currentLine][1]));
-				break;
+				start(Parse<int32>(commands[currentLine][1]));
+				return;
 
 			// Wait
-			case 14:
+			case 13:
 				timeManager.wait(Parse<double>(commands[currentLine][1]));
+				break;
+
+			// Speed
+			case 14:
+				messageManager.setSpeed(Parse<double>(commands[currentLine][1]));
+				break;
+
+			// Time
+			case 15:
+				messageManager.setTime(Parse<double>(commands[currentLine][1]));
+				break;
+
+			// TextureLoad
+			case 16:
+				TextureAsset::Preload(commands[currentLine][1]);
+				break;
+
+			// TextureRelease
+			case 17:
+				TextureAsset::Release(commands[currentLine][1]);
+				break;
+
+			// SoundLoad
+			case 18:
+				SoundAsset::Preload(commands[currentLine][1]);
+				break;
+
+			// SoundRelease
+			case 19:
+				SoundAsset::Release(commands[currentLine][1]);
 				break;
 
 			default:
