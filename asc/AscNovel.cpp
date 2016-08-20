@@ -11,9 +11,7 @@ namespace asc
 {
 	using namespace s3d;
 
-	using Commnad = std::pair<int32, String>;
-
-	const Commnad EndOfCommand = std::pair<int32, String>(0, L"-1");
+	const auto EndOfCommand = Array<String>{ L"0", L"-1" };
 
 	class Novel::CNovel
 	{
@@ -27,7 +25,7 @@ namespace asc
 
 		KeyCombination skip;
 
-		Array<Commnad> commands;
+		Array<Array<String>> commands;
 
 		ChoiceManager choiceManager;
 
@@ -62,7 +60,7 @@ namespace asc
 
 		void execute()
 		{
-			switch (commands[currentLine].first)
+			switch (Parse<int32>(commands[currentLine][0]))
 			{
 			// Point
 			case 0:
@@ -72,7 +70,7 @@ namespace asc
 			// Text
 			case 1:
 			{
-				const auto args = commands[currentLine].second.split(L',');
+				const auto args = commands[currentLine][1].split(L',');
 				messageManager.setText(args[0]);
 				messageManager.start(args.size() > 1);
 				break;
@@ -80,62 +78,62 @@ namespace asc
 
 			// Name
 			case 2:
-				messageManager.setName(commands[currentLine].second);
+				messageManager.setName(commands[currentLine][1]);
 				break;
 
 			// Sprite
 			case 3:
-				spriteManager.add<Sprite>(commands[currentLine].second);
+				//spriteManager.add<Sprite>(commands[currentLine][1]);
 				break;
 
 			// FixedSprite
 			case 4:
-				spriteManager.add<FixedSprite>(commands[currentLine].second);
+				//spriteManager.add<FixedSprite>(commands[currentLine][1]);
 				break;
 
 			// Choice
 			case 5:
-				choiceManager.start(commands[currentLine].second);
+				choiceManager.start(commands[currentLine][1]);
 				break;
 
 			// Jump
 			case 6:
-				start(Parse<int32>(commands[currentLine].second));
+				start(Parse<int32>(commands[currentLine][1]));
 				return;
 
 			// Play
 			case 8:
-				soundManager.playBGM(commands[currentLine].second);
+				soundManager.playBGM(commands[currentLine][1]);
 				break;
 
 			// Stop
 			case 9:
-				soundManager.stopBGM(commands[currentLine].second);
+				soundManager.stopBGM(commands[currentLine][1]);
 				break;
 
 			// Lihgt
 			case 10:
-				spriteManager.lightUp(commands[currentLine].second);
+				spriteManager.lightUp(commands[currentLine][1]);
 				break;
 
 			// Spot
 			case 11:
-				spriteManager.lightUpSpot(commands[currentLine].second);
+				spriteManager.lightUpSpot(commands[currentLine][1]);
 				break;
 
 			// Bring
 			case 12:
-				spriteManager.bring(commands[currentLine].second);
+				spriteManager.bring(commands[currentLine][1]);
 				break;
 
 			// Erase
 			case 13:
-				spriteManager.erase(commands[currentLine].second);
+				spriteManager.erase(commands[currentLine][1]);
 				break;
 
 			// Wait
 			case 14:
-				timeManager.wait(commands[currentLine].second);
+				timeManager.wait(commands[currentLine][1]);
 				break;
 
 			default:
@@ -153,8 +151,8 @@ namespace asc
 				const auto index = (currentLine + i) % commands.size();
 
 				if (
-					commands[index].first == 0 &&
-					Parse<int32>(commands[index].second) == seekPoint
+					Parse<int32>(commands[index][0]) == 0 &&
+					Parse<int32>(commands[index][1]) == seekPoint
 				)
 				{
 					clearManager();
@@ -204,8 +202,7 @@ void asc::Novel::loadByString(const String& scenario, bool isAdditive)
 
 	for (const auto& line : lines)
 	{
-		const auto pos = line.indexOf(L",");
-		pImpl->commands.push_back(std::make_pair(Parse<int32>(line.substr(0U, pos)), line.substr(pos + 1U, line.length)));
+		pImpl->commands.push_back(line.split(L','));
 	}
 
 	pImpl->commands.push_back(EndOfCommand);
