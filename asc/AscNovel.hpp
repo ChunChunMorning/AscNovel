@@ -305,7 +305,7 @@ namespace asc
 		}
 
 		template <class Type>
-		Novel& setButton(const Type& button)
+		Novel& setButton(Type&& button)
 		{
 			return setButton(static_cast<std::unique_ptr<IMessageButton>>(std::make_unique<Type>(button)));
 		}
