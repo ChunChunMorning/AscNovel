@@ -17,6 +17,8 @@ namespace asc
 
 		void onSubmit() override {}
 
+		void onClear() override {}
+
 		void update() override {}
 
 		void draw() const override {}
@@ -201,6 +203,7 @@ namespace asc
 			m_name.clear();
 			m_text.clear();
 			m_stopwatch.reset();
+			m_button->onClear();
 		}
 
 		void skip()

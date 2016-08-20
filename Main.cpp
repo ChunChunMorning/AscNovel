@@ -19,6 +19,11 @@ public:
 		m_stopwatch.reset();
 	}
 
+	void onClear() override
+	{
+		m_stopwatch.reset();
+	}
+
 	void update() override {}
 
 	void draw() const override

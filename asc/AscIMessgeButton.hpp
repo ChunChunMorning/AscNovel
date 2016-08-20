@@ -12,6 +12,8 @@ namespace asc
 
 		virtual void onSubmit() = 0;
 
+		virtual void onClear() = 0;
+
 		virtual void update() = 0;
 
 		virtual void draw() const = 0;
