@@ -133,7 +133,7 @@ namespace asc
 
 			// Lihgt
 			case 10:
-				spriteManager.lightUp(Parse<int32>(commands[currentLine][1]), commands[currentLine].size() > 2);
+				spriteManager.lightUp(Parse<int32>(commands[currentLine][1]), commands[currentLine].size() < 3);
 				break;
 
 			// Spot
