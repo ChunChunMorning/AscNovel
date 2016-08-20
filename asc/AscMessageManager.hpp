@@ -140,7 +140,7 @@ namespace asc
 			m_button.swap(button);
 		}
 
-		void start(bool isAutomatic = false)
+		void start(bool isAutomatic)
 		{
 			m_stopwatch.start();
 			m_charCount = 0U;

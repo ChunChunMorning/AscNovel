@@ -64,79 +64,76 @@ namespace asc
 		{
 			switch (commands[currentLine].first)
 			{
-				// Point
+			// Point
 			case 0:
 				isUpdating = false;
 				return;
 
-				// Text
+			// Text
 			case 1:
-				messageManager.setText(commands[currentLine].second);
-				messageManager.start();
+			{
+				const auto args = commands[currentLine].second.split(L',');
+				messageManager.setText(args[0]);
+				messageManager.start(args.size() > 1);
 				break;
+			}
 
-				// Name
+			// Name
 			case 2:
 				messageManager.setName(commands[currentLine].second);
 				break;
 
-				// AddSprite
+			// Sprite
 			case 3:
 				spriteManager.add<Sprite>(commands[currentLine].second);
 				break;
 
-				// AddFixedSprite
+			// FixedSprite
 			case 4:
 				spriteManager.add<FixedSprite>(commands[currentLine].second);
 				break;
 
-				// Choice
+			// Choice
 			case 5:
 				choiceManager.start(commands[currentLine].second);
 				break;
 
-				// Jump
+			// Jump
 			case 6:
 				start(Parse<int32>(commands[currentLine].second));
 				return;
 
-				// AutomaticText
-			case 7:
-				messageManager.setText(commands[currentLine].second);
-				messageManager.start(true);
-				break;
-
-				// Play BGM
+			// Play
 			case 8:
 				soundManager.playBGM(commands[currentLine].second);
 				break;
 
-				// Stop BGM
+			// Stop
 			case 9:
 				soundManager.stopBGM(commands[currentLine].second);
 				break;
 
-				// Lihgt Up
+			// Lihgt
 			case 10:
 				spriteManager.lightUp(commands[currentLine].second);
 				break;
 
-				// Lihgt Up Spot
+			// Spot
 			case 11:
 				spriteManager.lightUpSpot(commands[currentLine].second);
 				break;
 
-				// Bring
+			// Bring
 			case 12:
 				spriteManager.bring(commands[currentLine].second);
 				break;
 
-				// Erase
+			// Erase
 			case 13:
 				spriteManager.erase(commands[currentLine].second);
 				break;
 
-				// Wait
+			// Wait
 			case 14:
 				timeManager.wait(commands[currentLine].second);
 				break;
