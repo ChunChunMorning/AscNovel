@@ -19,178 +19,152 @@ namespace asc
 	{
 	public:
 
-		bool m_isUpdating;
+		bool isUpdating;
 
-		int32 m_currentLine;
+		int32 currentLine;
 
-		int32 m_lastSeekPoint;
+		int32 lastSeekPoint;
 
-		KeyCombination m_skip;
+		KeyCombination skip;
 
-		Array<Commnad> m_commands;
+		Array<Commnad> commands;
 
-		ChoiceManager m_choiceManager;
+		ChoiceManager choiceManager;
 
-		MessageManager m_messageManager;
+		MessageManager messageManager;
 
-		SoundManager m_soundManager;
+		SoundManager soundManager;
 
-		SpriteManager m_spriteManager;
+		SpriteManager spriteManager;
 
-		TimeManager m_timeManager;
+		TimeManager timeManager;
 
 		CNovel() :
-			m_isUpdating(false),
-			m_currentLine(0),
-			m_lastSeekPoint(-1),
-			m_commands({ EndOfCommand }),
-			m_choiceManager(
-				[&] { m_soundManager.playMoveSound(); },
-				[&] { m_soundManager.playSubmitSound(); }
+			isUpdating(false),
+			currentLine(0),
+			lastSeekPoint(-1),
+			commands({ EndOfCommand }),
+			choiceManager(
+				[&] { soundManager.playMoveSound(); },
+				[&] { soundManager.playSubmitSound(); }
 				),
-			m_messageManager(
-				[&] { m_soundManager.playCharSound(); }
+			messageManager(
+				[&] { soundManager.playCharSound(); }
 				) {}
-
-		void loadByString(const String& scenario, bool isAdditive = false)
-		{
-			isAdditive ? m_commands.pop_back() : m_commands.clear();
-
-			const auto lines = scenario.trim().split(L'\n');
-
-			for (const auto& line : lines)
-			{
-				const auto pos = line.indexOf(L",");
-				m_commands.push_back(std::make_pair(Parse<int32>(line.substr(0U, pos)), line.substr(pos + 1U, line.length)));
-			}
-
-			m_commands.push_back(EndOfCommand);
-		}
 
 		void clearManager()
 		{
-			m_messageManager.clear();
-			m_spriteManager.clear();
-			m_choiceManager.clear();
-			m_timeManager.clear();
+			messageManager.clear();
+			spriteManager.clear();
+			choiceManager.clear();
+			timeManager.clear();
 		}
 
 		void execute()
 		{
-			switch (m_commands[m_currentLine].first)
+			switch (commands[currentLine].first)
 			{
 				// Point
 			case 0:
-				m_isUpdating = false;
+				isUpdating = false;
 				return;
 
 				// Text
 			case 1:
-				m_messageManager.setText(m_commands[m_currentLine].second);
-				m_messageManager.start();
+				messageManager.setText(commands[currentLine].second);
+				messageManager.start();
 				break;
 
 				// Name
 			case 2:
-				m_messageManager.setName(m_commands[m_currentLine].second);
+				messageManager.setName(commands[currentLine].second);
 				break;
 
 				// AddSprite
 			case 3:
-				m_spriteManager.add<Sprite>(m_commands[m_currentLine].second);
+				spriteManager.add<Sprite>(commands[currentLine].second);
 				break;
 
 				// AddFixedSprite
 			case 4:
-				m_spriteManager.add<FixedSprite>(m_commands[m_currentLine].second);
+				spriteManager.add<FixedSprite>(commands[currentLine].second);
 				break;
 
 				// Choice
 			case 5:
-				m_choiceManager.start(m_commands[m_currentLine].second);
+				choiceManager.start(commands[currentLine].second);
 				break;
 
 				// Jump
 			case 6:
-				start(Parse<int32>(m_commands[m_currentLine].second));
+				start(Parse<int32>(commands[currentLine].second));
 				return;
 
 				// AutomaticText
 			case 7:
-				m_messageManager.setText(m_commands[m_currentLine].second);
-				m_messageManager.start(true);
+				messageManager.setText(commands[currentLine].second);
+				messageManager.start(true);
 				break;
 
 				// Play BGM
 			case 8:
-				m_soundManager.playBGM(m_commands[m_currentLine].second);
+				soundManager.playBGM(commands[currentLine].second);
 				break;
 
 				// Stop BGM
 			case 9:
-				m_soundManager.stopBGM(m_commands[m_currentLine].second);
+				soundManager.stopBGM(commands[currentLine].second);
 				break;
 
 				// Lihgt Up
 			case 10:
-				m_spriteManager.lightUp(m_commands[m_currentLine].second);
+				spriteManager.lightUp(commands[currentLine].second);
 				break;
 
 				// Lihgt Up Spot
 			case 11:
-				m_spriteManager.lightUpSpot(m_commands[m_currentLine].second);
+				spriteManager.lightUpSpot(commands[currentLine].second);
 				break;
 
 				// Bring
 			case 12:
-				m_spriteManager.bring(m_commands[m_currentLine].second);
+				spriteManager.bring(commands[currentLine].second);
 				break;
 
 				// Erase
 			case 13:
-				m_spriteManager.erase(m_commands[m_currentLine].second);
+				spriteManager.erase(commands[currentLine].second);
 				break;
 
 				// Wait
 			case 14:
-				m_timeManager.wait(m_commands[m_currentLine].second);
+				timeManager.wait(commands[currentLine].second);
 				break;
 
 			default:
 				break;
 			}
 
-			m_currentLine++;
-		}
-
-		void skip()
-		{
-			while (m_isUpdating && !m_choiceManager.isUpdating())
-			{
-				execute();
-			}
-
-			m_timeManager.clear();
-			m_messageManager.skip();
+			currentLine++;
 		}
 
 		bool start(int32 seekPoint)
 		{
-			const auto size = m_commands.size() - 1;
+			const auto size = commands.size() - 1;
 			for (auto i = 0u; i < size; i++)
 			{
-				const auto index = (m_currentLine + i) % m_commands.size();
+				const auto index = (currentLine + i) % commands.size();
 
-				const auto command = m_commands[index];
+				const auto command = commands[index];
 				if (
 					command.first == 0 &&
 					Parse<int32>(command.second) == seekPoint
 					)
 				{
 					clearManager();
-					m_currentLine = index + 1;
-					m_lastSeekPoint = seekPoint;
-					m_isUpdating = true;
+					currentLine = index + 1;
+					lastSeekPoint = seekPoint;
+					isUpdating = true;
 
 					return true;
 				}
@@ -199,26 +173,15 @@ namespace asc
 			return false;
 		}
 
-		void update()
+		void skipCommand()
 		{
-			if (m_skip.clicked)
+			while (isUpdating && !choiceManager.isUpdating())
 			{
-				skip();
-			}
-
-			while (
-				m_isUpdating &&
-				!m_messageManager.isUpdating() &&
-				!m_choiceManager.isUpdating() &&
-				!m_timeManager.isUpdating()
-				)
-			{
-				m_choiceManager.lastSelectedSeekPoint().then([&](int32 seekPoint) { start(seekPoint); });
 				execute();
 			}
 
-			m_messageManager.update();
-			m_choiceManager.update();
+			timeManager.clear();
+			messageManager.skip();
 		}
 
 	};
@@ -239,7 +202,17 @@ bool asc::Novel::load(const FilePath& path, const Optional<TextEncoding>& encodi
 
 void asc::Novel::loadByString(const String& scenario, bool isAdditive)
 {
-	pImpl->loadByString(scenario, isAdditive);
+	isAdditive ? pImpl->commands.pop_back() : pImpl->commands.clear();
+
+	const auto lines = scenario.trim().split(L'\n');
+
+	for (const auto& line : lines)
+	{
+		const auto pos = line.indexOf(L",");
+		pImpl->commands.push_back(std::make_pair(Parse<int32>(line.substr(0U, pos)), line.substr(pos + 1U, line.length)));
+	}
+
+	pImpl->commands.push_back(EndOfCommand);
 }
 
 bool asc::Novel::start(int32 seekPoint)
@@ -249,139 +222,156 @@ bool asc::Novel::start(int32 seekPoint)
 
 void asc::Novel::update()
 {
-	pImpl->update();
+	if (pImpl->skip.clicked)
+	{
+		pImpl->skipCommand();
+	}
+
+	while (
+		pImpl->isUpdating &&
+		!pImpl->messageManager.isUpdating() &&
+		!pImpl->choiceManager.isUpdating() &&
+		!pImpl->timeManager.isUpdating()
+		)
+	{
+		pImpl->choiceManager.lastSelectedSeekPoint().then([&](int32 seekPoint) { start(seekPoint); });
+		pImpl->execute();
+	}
+
+	pImpl->messageManager.update();
+	pImpl->choiceManager.update();
 }
 
 bool asc::Novel::isUpdating() const
 {
-	return pImpl->m_isUpdating;
+	return pImpl->isUpdating;
 }
 
 int32 asc::Novel::seekPoint() const
 {
-	return pImpl->m_lastSeekPoint;
+	return pImpl->lastSeekPoint;
 }
 
 void asc::Novel::draw() const
 {
-	pImpl->m_spriteManager.draw();
-	pImpl->m_messageManager.draw();
-	pImpl->m_choiceManager.draw();
+	pImpl->spriteManager.draw();
+	pImpl->messageManager.draw();
+	pImpl->choiceManager.draw();
 }
 
 asc::Novel& asc::Novel::setSpeed(int32 speed)
 {
-	pImpl->m_messageManager.setSpeed(speed);
+	pImpl->messageManager.setSpeed(speed);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setWaitingTime(int32 time)
 {
-	pImpl->m_messageManager.setTime(time);
+	pImpl->messageManager.setTime(time);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setKey(const KeyCombination& submit, const KeyCombination& skip)
 {
-	pImpl->m_skip = skip;
-	pImpl->m_messageManager.setKey(submit);
+	pImpl->skip = skip;
+	pImpl->messageManager.setKey(submit);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setKey(const KeyCombination& submit, const KeyCombination& skip, const KeyCombination& up, const KeyCombination& down)
 {
-	pImpl->m_skip = skip;
-	pImpl->m_messageManager.setKey(submit);
-	pImpl->m_choiceManager.setKey(submit, up, down);
+	pImpl->skip = skip;
+	pImpl->messageManager.setKey(submit);
+	pImpl->choiceManager.setKey(submit, up, down);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setButton(std::unique_ptr<IMessageButton>&& button)
 {
-	pImpl->m_messageManager.setButton(std::move(button));
+	pImpl->messageManager.setButton(std::move(button));
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setFont(const FontAssetName& text, const FontAssetName& name)
 {
-	pImpl->m_messageManager.setFont(text, name);
-	pImpl->m_choiceManager.setFont(text);
+	pImpl->messageManager.setFont(text, name);
+	pImpl->choiceManager.setFont(text);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setColor(const Color& color, const Color& selectedColor)
 {
-	pImpl->m_messageManager.setColor(color);
-	pImpl->m_choiceManager.setColor(color, selectedColor);
+	pImpl->messageManager.setColor(color);
+	pImpl->choiceManager.setColor(color, selectedColor);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setMessageTexture(const TextureAssetName& texture, const Rect& region)
 {
-	pImpl->m_messageManager.setTexture(texture, region);
+	pImpl->messageManager.setTexture(texture, region);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setMessagePosition(const Point& text, const Point& name)
 {
-	pImpl->m_messageManager.setPosition(text, name);
+	pImpl->messageManager.setPosition(text, name);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setChoiceTexture(const TextureAssetName texture, const Rect& region)
 {
-	pImpl->m_choiceManager.setTexture(texture, region);
+	pImpl->choiceManager.setTexture(texture, region);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setChoicePosition(const Point& position)
 {
-	pImpl->m_choiceManager.setPosition(position);
+	pImpl->choiceManager.setPosition(position);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setBGMVolume(double volume)
 {
-	pImpl->m_soundManager.setBGMVolume(volume);
+	pImpl->soundManager.setBGMVolume(volume);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setSEVolume(double volume)
 {
-	pImpl->m_soundManager.setSEVolume(volume);
+	pImpl->soundManager.setSEVolume(volume);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setSound(const SoundAssetName& charCount)
 {
-	pImpl->m_soundManager.setSE(charCount);
+	pImpl->soundManager.setSE(charCount);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setSound(const SoundAssetName& charCount, const SoundAssetName& move, const SoundAssetName& submit)
 {
-	pImpl->m_soundManager.setSE(charCount, move, submit);
+	pImpl->soundManager.setSE(charCount, move, submit);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setSilentChars(const Array<wchar> silentChars)
 {
-	pImpl->m_messageManager.setSilentChars(silentChars);
+	pImpl->messageManager.setSilentChars(silentChars);
 
 	return *this;
 }
