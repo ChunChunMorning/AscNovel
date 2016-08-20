@@ -153,7 +153,7 @@ namespace asc
 
 			// Wait
 			case 14:
-				timeManager.wait(commands[currentLine][1]);
+				timeManager.wait(Parse<double>(commands[currentLine][1]));
 				break;
 
 			default:

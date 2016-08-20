@@ -19,15 +19,10 @@ namespace asc
 		TimeManager() :
 			m_time(-1) {}
 
-		void wait(const String& string)
-		{
-			wait(Parse<int32>(string));
-		}
-
-		void wait(int32 time)
+		void wait(double second)
 		{
 			m_stopwatch.start();
-			m_time = time;
+			m_time = static_cast<int32>(second * 1000);
 		}
 
 		void clear()
