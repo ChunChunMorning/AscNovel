@@ -28,6 +28,8 @@ namespace asc
 
 		void loadByString(const String& scenario, bool isAdditive = false);
 
+		void clear();
+
 		bool start(int32 seekPoint);
 
 		void update();

@@ -258,6 +258,12 @@ void asc::Novel::loadByString(const String& scenario, bool isAdditive)
 	pImpl->commands.push_back(EndOfCommand);
 }
 
+void asc::Novel::clear()
+{
+	pImpl->clearManager();
+	pImpl->commands.clear();
+}
+
 bool asc::Novel::start(int32 seekPoint)
 {
 	return pImpl->start(seekPoint);
