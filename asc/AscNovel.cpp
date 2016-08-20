@@ -47,16 +47,16 @@ namespace asc
 			choiceManager(
 				[&] { soundManager.playMoveSound(); },
 				[&] { soundManager.playSubmitSound(); }
-				),
+			),
 			messageManager(
 				[&] { soundManager.playCharSound(); }
-				) {}
+			) {}
 
 		void clearManager()
 		{
+			choiceManager.clear();
 			messageManager.clear();
 			spriteManager.clear();
-			choiceManager.clear();
 			timeManager.clear();
 		}
 
@@ -150,16 +150,15 @@ namespace asc
 
 		bool start(int32 seekPoint)
 		{
-			const auto size = commands.size() - 1;
+			const auto size = commands.size() - 1U;
 			for (auto i = 0u; i < size; i++)
 			{
 				const auto index = (currentLine + i) % commands.size();
 
-				const auto command = commands[index];
 				if (
-					command.first == 0 &&
-					Parse<int32>(command.second) == seekPoint
-					)
+					commands[index].first == 0 &&
+					Parse<int32>(commands[index].second) == seekPoint
+				)
 				{
 					clearManager();
 					currentLine = index + 1;
@@ -180,8 +179,8 @@ namespace asc
 				execute();
 			}
 
-			timeManager.clear();
 			messageManager.skip();
+			timeManager.clear();
 		}
 
 	};
@@ -229,8 +228,8 @@ void asc::Novel::update()
 
 	while (
 		pImpl->isUpdating &&
-		!pImpl->messageManager.isUpdating() &&
 		!pImpl->choiceManager.isUpdating() &&
+		!pImpl->messageManager.isUpdating() &&
 		!pImpl->timeManager.isUpdating()
 		)
 	{
@@ -238,8 +237,8 @@ void asc::Novel::update()
 		pImpl->execute();
 	}
 
-	pImpl->messageManager.update();
 	pImpl->choiceManager.update();
+	pImpl->messageManager.update();
 }
 
 bool asc::Novel::isUpdating() const
@@ -284,8 +283,8 @@ asc::Novel& asc::Novel::setKey(const KeyCombination& submit, const KeyCombinatio
 asc::Novel& asc::Novel::setKey(const KeyCombination& submit, const KeyCombination& skip, const KeyCombination& up, const KeyCombination& down)
 {
 	pImpl->skip = skip;
-	pImpl->messageManager.setKey(submit);
 	pImpl->choiceManager.setKey(submit, up, down);
+	pImpl->messageManager.setKey(submit);
 
 	return *this;
 }
@@ -299,16 +298,16 @@ asc::Novel& asc::Novel::setButton(std::unique_ptr<IMessageButton>&& button)
 
 asc::Novel& asc::Novel::setFont(const FontAssetName& text, const FontAssetName& name)
 {
-	pImpl->messageManager.setFont(text, name);
 	pImpl->choiceManager.setFont(text);
+	pImpl->messageManager.setFont(text, name);
 
 	return *this;
 }
 
 asc::Novel& asc::Novel::setColor(const Color& color, const Color& selectedColor)
 {
-	pImpl->messageManager.setColor(color);
 	pImpl->choiceManager.setColor(color, selectedColor);
+	pImpl->messageManager.setColor(color);
 
 	return *this;
 }
