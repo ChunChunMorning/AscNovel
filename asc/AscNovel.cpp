@@ -62,7 +62,7 @@ namespace asc
 		{
 			switch (Parse<int32>(commands[currentLine][0]))
 			{
-			// Point
+			// SeekPoint
 			case 0:
 				isUpdating = false;
 				return;
@@ -70,9 +70,8 @@ namespace asc
 			// Text
 			case 1:
 			{
-				const auto args = commands[currentLine][1].split(L',');
-				messageManager.setText(args[0]);
-				messageManager.start(args.size() > 1);
+				messageManager.setText(commands[currentLine][1]);
+				messageManager.start(commands[currentLine].size() > 2);
 				break;
 			}
 
@@ -83,12 +82,26 @@ namespace asc
 
 			// Sprite
 			case 3:
-				//spriteManager.add<Sprite>(commands[currentLine][1]);
+				spriteManager.add<Sprite>(
+					Parse<int32>(commands[currentLine][1]),
+					commands[currentLine][2],
+					Parse<double>(commands[currentLine][3]),
+					Parse<double>(commands[currentLine][4]),
+					Parse<double>(commands[currentLine][5]),
+					Parse<double>(commands[currentLine][6])
+					);
 				break;
 
 			// FixedSprite
 			case 4:
-				//spriteManager.add<FixedSprite>(commands[currentLine][1]);
+				spriteManager.add<FixedSprite>(
+					Parse<int32>(commands[currentLine][1]),
+					commands[currentLine][2],
+					Parse<double>(commands[currentLine][3]),
+					Parse<double>(commands[currentLine][4]),
+					Parse<double>(commands[currentLine][5]),
+					Parse<double>(commands[currentLine][6])
+					);
 				break;
 
 			// Choice

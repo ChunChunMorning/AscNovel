@@ -25,18 +25,11 @@ namespace asc
 
 		Sprite() = default;
 
-		Sprite(const String& string)
-		{
-			const auto args = string.split(L',');
-
-			m_id = Parse<int32>(args[0]);
-			m_texture = args[1];
-			m_region.x = Parse<double>(args[2]);
-			m_region.y = Parse<double>(args[3]);
-			m_region.w = Parse<double>(args[4]);
-			m_region.h = Parse<double>(args[5]);
-			m_light = false;
-		}
+		Sprite(int32 id, const TextureAssetName& texture, double x, double y, double w, double h) :
+			m_id(id),
+			m_texture(texture),
+			m_region(x, y, w, h),
+			m_light(false) {}
 
 		virtual ~Sprite() = default;
 
@@ -63,7 +56,8 @@ namespace asc
 
 		FixedSprite() = default;
 
-		FixedSprite(const String& string) : Sprite(string) {}
+		FixedSprite(int32 id, const TextureAssetName& texture, double x, double y, double w, double h) :
+			Sprite(id, texture, x, y, w, h) {}
 
 		virtual void draw() const override
 		{

@@ -15,9 +15,9 @@ namespace asc
 	public:
 
 		template <class Type>
-		void add(const String& string)
+		void add(int32 id, const TextureAssetName& texture, double x, double y, double w, double h)
 		{
-			m_sprites.push_back(std::make_unique<Type>(string));
+			m_sprites.push_back(std::make_unique<Type>(id, texture, x, y, w, h));
 		}
 
 		void lightUp(const String& string)
