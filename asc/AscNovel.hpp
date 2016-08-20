@@ -310,6 +310,11 @@ namespace asc
 			return setButton(static_cast<std::unique_ptr<IMessageButton>>(std::make_unique<Type>(button)));
 		}
 
+		Novel& setFont(const FontAssetName& text)
+		{
+			return setFont(text, text);
+		}
+
 		Novel& setFont(const FontAssetName& text, const FontAssetName& name = L"")
 		{
 			m_messageManager.setFont(text, name);
