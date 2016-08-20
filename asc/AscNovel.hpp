@@ -156,51 +156,22 @@ namespace asc
 			),
 			m_messageManager(
 				[&] { m_soundManager.playCharSound(); }
-			)
-		{
-			m_commands.push_back({ 0, L"1"});
-			m_commands.push_back({ 3, L"1,character1,0,0,640,720" });
-			m_commands.push_back({ 3, L"3,character3,480,180,320,360" });
-			m_commands.push_back({ 1, L"Characters" });
-			m_commands.push_back({ 0, L"2" });
-			m_commands.push_back({ 1, L"Only Text" });
-			m_commands.push_back({ 0, L"3" });
-			m_commands.push_back({ 7, L"Show Character?" });
-			m_commands.push_back({ 5, L"1,Yes,2,No" });
-			m_commands.push_back({ 0, L"4" });
-			m_commands.push_back({ 1, L"Jump 2" });
-			m_commands.push_back({ 6, L"2" });
-			m_commands.push_back({ 0, L"5" });
-			m_commands.push_back({ 8, L"bgm1,3" });
-			m_commands.push_back({ 1, L"Play BGM1" });
-			m_commands.push_back({ 0, L"6" });
-			m_commands.push_back({ 9, L"bgm1,3" });
-			m_commands.push_back({ 8, L"bgm2,3" });
-			m_commands.push_back({ 1, L"Play BGM2" });
-			m_commands.push_back({ 9, L"bgm2,0" });
-			m_commands.push_back({ 1, L"Stop BGM2" });
-			m_commands.push_back({ 0, L"7" });
-			m_commands.push_back({ 3, L"1,character1,0,0,640,720" });
-			m_commands.push_back({ 3, L"3,character3,0,180,320,360" });
-			m_commands.push_back({ 10, L"1,true" });
-			m_commands.push_back({ 10, L"3,true" });
-			m_commands.push_back({ 1, L"Light Up" });
-			m_commands.push_back({ 10, L"1,false" });
-			m_commands.push_back({ 1, L"Light Down" });
-			m_commands.push_back({ 11, L"1" });
-			m_commands.push_back({ 1, L"Spot Light" });
-			m_commands.push_back({ 12, L"1" });
-			m_commands.push_back({ 1, L"Bring 1" });
-			m_commands.push_back({ 13, L"3" });
-			m_commands.push_back({ 1, L"Erase 3" });
-			m_commands.push_back({ 0, L"8" });
-			m_commands.push_back({ 7, L"Wait 3 second" });
-			m_commands.push_back({ 14, L"3000" });
-			m_commands.push_back({ 1, L"fin" });
-			m_commands.push_back({ 0, L"-1" });
-		}
+			) {}
 
 		virtual ~Novel() = default;
+
+		void loadByString(const String& scenario)
+		{
+			const auto lines = scenario.trim().split(L'\n');
+
+			for (const auto& line : lines)
+			{
+				const auto pos = line.indexOf(L",");
+				m_commands.push_back(std::make_pair(Parse<int32>(line.substr(0U, pos)), line.substr(pos + 1, line.length)));
+			}
+
+			m_commands.push_back(std::make_pair(0, L"-1"));
+		}
 
 		bool start(int32 seekPoint)
 		{
