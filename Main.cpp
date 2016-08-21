@@ -39,7 +39,14 @@ public:
 
 void Main()
 {
+	////////////////////
+	// アセットの作成
+
 	FontManager::Register(L"Exaple/YomogiFont.ttf");
+
+	TextWriter writer(L"scenario.txt");
+	writer.write(L"0,1\n2,システム\n1,サンプルの実行、ありがとうございます。\\n好きな図形をクリックしてください。\n0,2\n3,1,chara1,290,0,350,480\n3,2,chara2,0,0,350,480\n7,2\n2,Siv3D君\n1,このように任意の画像を\\n表示させることができます。\n7,1\n1,キャラの陰影も操作可能で\\n誰のセリフか、はっきりさせることができます。\n8,1\n0,3\n2,システム\n1,ウィンドウの表示を実行時のみにしました。\n0,4\n2,システム\n1,ウィンドウを常に表示します。\n1,消したい場合は再び\\n青い四角をクリックしてください。\n0,5\n2,システム\n1,サンプルを終了しますか？,\n9,6,続ける,7,終了する\n0,6\n0,7\n2,システム\n1,サンプルを終了します。\\n決定ボタンを押してください。");
+	writer.close();
 
 	TextureAssetData message;
 	message.onPreload = [](TextureAssetData& data) {
@@ -67,14 +74,31 @@ void Main()
 
 	TextureAsset::Register(L"message", message);
 	TextureAsset::Register(L"choice", choice);
-	TextureAsset::Register(L"character", L"Example/Siv3D-kun.png");
-	TextureAsset::Register(L"mirror", mirror);
+	TextureAsset::Register(L"chara1", L"Example/Siv3D-kun.png");
+	TextureAsset::Register(L"chara2", mirror);
 	SoundAsset::Register(L"se", L"Example/Sound.mp3");
 	SoundAsset::Register(L"bgm", L"Example/風の丘.mp3");
 	FontAsset::Register(L"text", 12, L"よもぎフォント");
 
+
+
+	////////////////////
+	// サンプル用のデータ
+
+	Graphics::SetBackground(Palette::Whitesmoke);
+	Circle circle(110, 120, 80);
+	Rect rect(120, 260, 200, 150);
+	Triangle triangle(500, 180, 200);
+	bool isShowNovel = false;
+
+
+
+	////////////////////
+	// Novelの使用
+
 	asc::Novel novel;
 
+	// 各種項目を設定します.
 	novel
 		.setFont(L"text")
 		.setColor(Palette::Black)
@@ -91,43 +115,46 @@ void Main()
 			Input::KeyDown | XInput(0).buttonDown
 			);
 
+	// シナリオファイルを読み込みます.
 	novel.load(L"scenario.txt");
+
+	// シナリオファイル中の該当する番号を開始します.
+	novel.start(1);
 
 	while (System::Update())
 	{
-		if (Input::Key0.clicked)
-			novel.start(0);
-
-		if(Input::Key1.clicked)
-			novel.start(1);
-
-		if(Input::Key2.clicked)
+		if (circle.leftClicked)
 			novel.start(2);
 
-		if (Input::Key3.clicked)
-			novel.start(3);
+		if (rect.leftClicked)
+			novel.start(isShowNovel ? 3 : 4);
 
-		if (Input::Key4.clicked)
-			novel.start(4);
-
-		if (Input::Key5.clicked)
+		if (triangle.leftClicked)
 			novel.start(5);
 
-		if (Input::Key6.clicked)
-			novel.start(6);
-
-		if (Input::Key7.clicked)
-			novel.start(7);
-
-		if (Input::Key8.clicked)
-			novel.start(8);
-
-		if (Input::Key9.clicked)
-			novel.start(9);
-
+		// 必ず毎ループ呼び出します.
 		novel.update();
 
-		if(novel.isUpdating())
+		// seekPoint関数で実行中の番号を取得できます.
+		if (novel.seekPoint() == 3 || novel.seekPoint() == 4)
+		{
+			isShowNovel = !isShowNovel;
+
+			// seekPoint関数の戻り値を消去できます.
+			novel.clearSeekPoint();
+		}
+		// シナリオ終了時に実行したい場合, isUpdating関数で終了するのを待ちます.
+		else if (!novel.isUpdating() && novel.seekPoint() == 7)
+		{
+			System::Exit();
+		}
+
+		circle.draw(Palette::Red);
+		triangle.draw(Palette::Green);
+		rect.draw(Palette::Blue);
+
+		// シナリオ終了後も最後の状態を保持しているので, 実行時以外も描画できます.
+		if (novel.isUpdating() || isShowNovel)
 			novel.draw();
 	}
 }
