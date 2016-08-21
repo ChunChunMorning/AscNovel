@@ -89,7 +89,7 @@ namespace asc
 
 		void setText(const String& text)
 		{
-			m_text = text.replace(L"\\n", L"\n");
+			m_text = text;
 		}
 
 		void setKey(const KeyCombination& submit)

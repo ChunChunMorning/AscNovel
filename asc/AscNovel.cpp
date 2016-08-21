@@ -252,7 +252,7 @@ void asc::Novel::loadByString(const String& scenario, bool isAdditive)
 
 	for (const auto& line : lines)
 	{
-		pImpl->commands.push_back(line.split(L','));
+		pImpl->commands.push_back(line.replace(L"\\n", L"\n").split(L','));
 	}
 
 	pImpl->commands.push_back(EndOfCommand);
