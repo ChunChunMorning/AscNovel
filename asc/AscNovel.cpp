@@ -45,10 +45,10 @@ namespace asc
 			choiceManager(
 				[&] { soundManager.playMoveSound(); },
 				[&] { soundManager.playSubmitSound(); }
-			),
+				),
 			messageManager(
 				[&] { soundManager.playCharSound(); }
-			) {}
+				) {}
 
 		void clearManager()
 		{
@@ -203,7 +203,7 @@ namespace asc
 				if (
 					Parse<int32>(commands[index][0]) == 0 &&
 					Parse<int32>(commands[index][1]) == seekPoint
-				)
+					)
 				{
 					clearManager();
 					currentLine = index + 1;
