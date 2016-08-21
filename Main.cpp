@@ -50,7 +50,15 @@ void Main()
 		return static_cast<bool>(data.texture);
 	};
 
+	TextureAssetData mirror;
+	mirror.onPreload = [](TextureAssetData& data) {
+		data.texture = Texture(Image(L"Example/Siv3D-kun.png").mirrored());
+		return static_cast<bool>(data.texture);
+	};
+
 	TextureAsset::Register(L"message", message);
+	TextureAsset::Register(L"character", L"Example/Siv3D-kun.png");
+	TextureAsset::Register(L"mirror", mirror);
 	SoundAsset::Register(L"se", L"Example/Sound.mp3");
 	SoundAsset::Register(L"bgm", L"Example/風の丘.mp3");
 	FontAsset::Register(L"text", 12, L"よもぎフォント");
