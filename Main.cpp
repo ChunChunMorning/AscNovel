@@ -50,6 +50,15 @@ void Main()
 		return static_cast<bool>(data.texture);
 	};
 
+	TextureAssetData choice;
+	choice.onPreload = [](TextureAssetData& data) {
+		Image image(200, 100);
+		Rect(0, 0, 200, 100).overwrite(image, Palette::Lightgreen);
+		Rect(0, 0, 200, 100).stretched(-5).overwrite(image, Palette::Lightyellow);
+		data.texture = Texture(image);
+		return static_cast<bool>(data.texture);
+	};
+
 	TextureAssetData mirror;
 	mirror.onPreload = [](TextureAssetData& data) {
 		data.texture = Texture(Image(L"Example/Siv3D-kun.png").mirrored());
@@ -57,6 +66,7 @@ void Main()
 	};
 
 	TextureAsset::Register(L"message", message);
+	TextureAsset::Register(L"choice", choice);
 	TextureAsset::Register(L"character", L"Example/Siv3D-kun.png");
 	TextureAsset::Register(L"mirror", mirror);
 	SoundAsset::Register(L"se", L"Example/Sound.mp3");
@@ -68,11 +78,18 @@ void Main()
 	novel
 		.setFont(L"text")
 		.setColor(Palette::Black)
-		.setMessageTexture(L"message", Rect(0, 320, 640, 160))
-		.setMessagePosition({40, 380}, {30, 340})
+		.setMessageTexture(L"message", { 0, 320, 640, 160 })
+		.setMessagePosition({ 40, 380 }, { 30, 340 })
+		.setChoiceTexture(L"choice", { 430, 210, 200, 100 })
+		.setChoicePosition({ 450, 230 })
 		.setSound(L"se", L"se", L"se")
 		.setButton(MyButton())
-		.setKey(KeyCombination(Input::KeyEnter), KeyCombination(Input::KeySpace), KeyCombination(Input::KeyUp), KeyCombination(Input::KeyDown));
+		.setKey(
+			Input::KeyEnter | XInput(0).buttonB,
+			Input::KeySpace | XInput(0).buttonA,
+			Input::KeyUp | XInput(0).buttonUp,
+			Input::KeyDown | XInput(0).buttonDown
+			);
 
 	novel.load(L"scenario.txt");
 
