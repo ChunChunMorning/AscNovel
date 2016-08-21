@@ -123,9 +123,7 @@ namespace asc
 			if(!m_isUpdating)
 				return;
 
-			const KeyCombination m_submit = Input::KeyEnter | Gamepad(0).button(0);
-
-			if (m_submit.clicked)
+			if (m_keySubmit.clicked)
 			{
 				m_onSubmit();
 				m_lastSelectedSeekPoint = m_choices[m_selected].seekPoint;
