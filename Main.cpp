@@ -28,12 +28,12 @@ public:
 
 	void draw() const override
 	{
-		if(!m_stopwatch.isActive())
+		if (!m_stopwatch.isActive())
 			return;
 
 		const double r = Min<double>(10.0, m_stopwatch.ms() / 10);
 
-		Circle(1230, 680, r).draw();
+		Circle(595, 440, r).draw(Palette::Lightgreen);
 	}
 };
 
