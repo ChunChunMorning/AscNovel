@@ -30,6 +30,8 @@ namespace asc
 
 		void clear();
 
+		int32 clearSeekPoint();
+
 		bool start(int32 seekPoint);
 
 		void update();

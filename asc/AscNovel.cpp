@@ -264,6 +264,13 @@ void asc::Novel::clear()
 	pImpl->commands.clear();
 }
 
+int32 asc::Novel::clearSeekPoint()
+{
+	const auto tmp = pImpl->lastSeekPoint;
+	pImpl->lastSeekPoint = -1;
+	return tmp;
+}
+
 bool asc::Novel::start(int32 seekPoint)
 {
 	return pImpl->start(seekPoint);
