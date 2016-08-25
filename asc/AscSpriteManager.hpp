@@ -49,9 +49,7 @@ namespace asc
 			{
 				if (e1->getID() == id)
 					return false;
-				else if (e2->getID() == id)
-					return true;
-				return true;
+				return e2->getID() == id;
 			}
 			);
 		}
