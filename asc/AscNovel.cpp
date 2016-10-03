@@ -312,19 +312,28 @@ void asc::Novel::update()
 	pImpl->messageManager.update();
 }
 
-bool asc::Novel::isStarted() const
+Optional<int32> asc::Novel::isStarted() const
 {
-	return pImpl->state == State::Start;
+	if(pImpl->state != State::Start)
+		return none;
+
+	return pImpl->lastSeekPoint;
 }
 
-bool asc::Novel::isUpdating() const
+Optional<int32> asc::Novel::isUpdating() const
 {
-	return pImpl->state == State::Update;
+	if (pImpl->state != State::Update)
+		return none;
+
+	return pImpl->lastSeekPoint;
 }
 
-bool asc::Novel::isFinished() const
+Optional<int32> asc::Novel::isFinished() const
 {
-	return pImpl->state == State::Finish;
+	if (pImpl->state != State::Finish)
+		return none;
+
+	return pImpl->lastSeekPoint;
 }
 
 int32 asc::Novel::seekPoint() const

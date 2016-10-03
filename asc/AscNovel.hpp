@@ -34,11 +34,11 @@ namespace asc
 
 		void update();
 
-		bool isStarted() const;
+		Optional<int32> isStarted() const;
 
-		bool isUpdating() const;
+		Optional<int32> isUpdating() const;
 
-		bool isFinished() const;
+		Optional<int32> isFinished() const;
 
 		int32 seekPoint() const;
 
