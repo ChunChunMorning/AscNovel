@@ -30,13 +30,15 @@ namespace asc
 
 		void clear();
 
-		int32 clearSeekPoint();
-
 		bool start(int32 seekPoint);
 
 		void update();
 
+		bool isStarted() const;
+
 		bool isUpdating() const;
+
+		bool isFinished() const;
 
 		int32 seekPoint() const;
 

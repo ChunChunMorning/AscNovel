@@ -132,19 +132,17 @@ void Main()
 		if (triangle.leftClicked)
 			novel.start(5);
 
+		// isStarted関数でシナリオ開始からupdate関数が呼ばれるまでの間を取得できます.
+		if (novel.isStarted() && (novel.seekPoint() == 3 || novel.seekPoint() == 4))
+		{
+			isShowNovel = !isShowNovel;
+		}
+
 		// 必ず毎ループ呼び出します.
 		novel.update();
 
-		// seekPoint関数で実行中の番号を取得できます.
-		if (novel.seekPoint() == 3 || novel.seekPoint() == 4)
-		{
-			isShowNovel = !isShowNovel;
-
-			// seekPoint関数の戻り値を消去できます.
-			novel.clearSeekPoint();
-		}
-		// シナリオ終了時に実行したい場合, isUpdating関数で終了するのを待ちます.
-		else if (!novel.isUpdating() && novel.seekPoint() == 7)
+		// isFinished関数でシナリオ終了時から再びupdate関数が呼ばれるまでの間を取得できます.
+		if (novel.isFinished() && novel.seekPoint() == 7)
 		{
 			System::Exit();
 		}

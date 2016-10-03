@@ -13,11 +13,13 @@ namespace asc
 
 	const auto EndOfCommand = Array<String>{ L"0", L"-1" };
 
+	enum class State { None, Start, Update, Finish };
+
 	class Novel::CNovel
 	{
 	public:
 
-		bool isUpdating;
+		State state;
 
 		int32 currentLine;
 
@@ -38,7 +40,7 @@ namespace asc
 		TimeManager timeManager;
 
 		CNovel() :
-			isUpdating(false),
+			state(State::None),
 			currentLine(0),
 			lastSeekPoint(-1),
 			commands({ EndOfCommand }),
@@ -64,7 +66,7 @@ namespace asc
 			{
 			// SeekPoint
 			case 0:
-				isUpdating = false;
+				state = State::Finish;
 				return;
 
 			// Text
@@ -208,7 +210,7 @@ namespace asc
 					clearManager();
 					currentLine = index + 1;
 					lastSeekPoint = seekPoint;
-					isUpdating = true;
+					state = State::Start;
 
 					return true;
 				}
@@ -217,9 +219,26 @@ namespace asc
 			return false;
 		}
 
+		void updateState()
+		{
+			switch (state)
+			{
+			case State::Start:
+				state = State::Update;
+				break;
+
+			case State::Finish:
+				state = State::None;
+				break;
+
+			default:
+				break;
+			}
+		}
+
 		void skipCommand()
 		{
-			while (isUpdating && !choiceManager.isUpdating())
+			while (state == State::Update && !choiceManager.isUpdating())
 			{
 				execute();
 			}
@@ -264,13 +283,6 @@ void asc::Novel::clear()
 	pImpl->commands.clear();
 }
 
-int32 asc::Novel::clearSeekPoint()
-{
-	const auto tmp = pImpl->lastSeekPoint;
-	pImpl->lastSeekPoint = -1;
-	return tmp;
-}
-
 bool asc::Novel::start(int32 seekPoint)
 {
 	return pImpl->start(seekPoint);
@@ -278,13 +290,15 @@ bool asc::Novel::start(int32 seekPoint)
 
 void asc::Novel::update()
 {
+	pImpl->updateState();
+
 	if (pImpl->skip.clicked)
 	{
 		pImpl->skipCommand();
 	}
 
 	while (
-		pImpl->isUpdating &&
+		pImpl->state == State::Update &&
 		!pImpl->choiceManager.isUpdating() &&
 		!pImpl->messageManager.isUpdating() &&
 		!pImpl->timeManager.isUpdating()
@@ -298,9 +312,19 @@ void asc::Novel::update()
 	pImpl->messageManager.update();
 }
 
+bool asc::Novel::isStarted() const
+{
+	return pImpl->state == State::Start;
+}
+
 bool asc::Novel::isUpdating() const
 {
-	return pImpl->isUpdating;
+	return pImpl->state == State::Update;
+}
+
+bool asc::Novel::isFinished() const
+{
+	return pImpl->state == State::Finish;
 }
 
 int32 asc::Novel::seekPoint() const
